@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、使用Powershell基于Windows和Mac系统命令行的使用差异，可统一使用Powershell，win10系统自带Powershell，其它系统也可安装。 二、打开命令窗口①默认方式打开：打开”运行”对话框(Win+R)，输入cmd，打开系统默认控制台命令窗口，或者输入Powershell打开Powershell窗口。 ②在目标位置打开：在需要打开的文件夹空白处按住Shift，然后右键">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包">
+<meta property="og:url" content="http://yoursite.com/2019/02/18/命令行/index.html">
+<meta property="og:site_name" content="Chen&#39;s blog">
+<meta property="og:description" content="一、使用Powershell基于Windows和Mac系统命令行的使用差异，可统一使用Powershell，win10系统自带Powershell，其它系统也可安装。 二、打开命令窗口①默认方式打开：打开”运行”对话框(Win+R)，输入cmd，打开系统默认控制台命令窗口，或者输入Powershell打开Powershell窗口。 ②在目标位置打开：在需要打开的文件夹空白处按住Shift，然后右键">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-19T02:17:24.029Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="闭包">
+<meta name="twitter:description" content="一、使用Powershell基于Windows和Mac系统命令行的使用差异，可统一使用Powershell，win10系统自带Powershell，其它系统也可安装。 二、打开命令窗口①默认方式打开：打开”运行”对话框(Win+R)，输入cmd，打开系统默认控制台命令窗口，或者输入Powershell打开Powershell窗口。 ②在目标位置打开：在需要打开的文件夹空白处按住Shift，然后右键">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/18/命令行/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>闭包 | Chen's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>blog</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>archive</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/18/命令行/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chenyulun">
+      <meta itemprop="description" content="from now on">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">闭包
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-18 11:45:20" itemprop="dateCreated datePublished" datetime="2019-02-18T11:45:20+08:00">2019-02-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 10:17:24" itemprop="dateModified" datetime="2019-02-19T10:17:24+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="一、使用Powershell"><a href="#一、使用Powershell" class="headerlink" title="一、使用Powershell"></a>一、使用Powershell</h5><p>基于<code>Windows</code>和<code>Mac</code>系统命令行的使用差异，可统一使用<code>Powershell</code>，<code>win10</code>系统自带<code>Powershell</code>，其它系统也可安装。</p>
+<h5 id="二、打开命令窗口"><a href="#二、打开命令窗口" class="headerlink" title="二、打开命令窗口"></a>二、打开命令窗口</h5><p>①默认方式打开：打开”运行”对话框<code>(Win+R)</code>，输入<code>cmd</code>，打开系统默认控制台命令窗口，或者输入<code>Powershell</code>打开<code>Powershell</code>窗口。</p>
+<p>②在目标位置打开：在需要打开的文件夹空白处按住<code>Shift</code>，然后右键弹出快捷菜单，可以看到“在此处打开命令行窗口”或者是“在此处打开Powershell窗口”。</p>
+<h5 id="三、进入目标文件夹"><a href="#三、进入目标文件夹" class="headerlink" title="三、进入目标文件夹"></a>三、进入目标文件夹</h5><p>①更改盘符：默认打开<code>Powershell</code>时会在C盘默认位置，要改变盘符，可使用cd命令，即<code>change directory</code>，如进入E盘，使用<code>cd E:</code>或<code>cd e:</code>，不计大小写，中间空格隔开。</p>
+<p>②更改文件夹：cd后跟上要进入的文件夹路径，如<code>cd notes/markdown</code>，会进入到当前位置下的<code>notes</code>文件夹下的<code>markdown</code>文件夹；返回上级目录可使用<code>cd ..</code>，即返回到<code>notes</code>文件夹下。</p>
+<p>③也可在打开<code>Powershell</code>窗口后直接把目标文件夹拖入窗口中，这样可直接进入目标文件夹，这个效果和在目标位置打开<code>Powershell</code>窗口一致。</p>
+<h5 id="四、创建-amp-删除"><a href="#四、创建-amp-删除" class="headerlink" title="四、创建&amp;删除"></a>四、创建&amp;删除</h5><p>①创建文件夹：<code>mkdir</code>，即<code>make directory</code>，例如使用<code>mkdir learn</code>,可在当前位置创建一个名为<code>learn</code>的文件夹。</p>
+<p>②删除文件夹：<code>rmdir</code>，即<code>remove directory</code>，例如可使用<code>rmdir learn</code>把刚才创建的<code>learn</code>文件夹删除。</p>
+<p>③创建文件：<code>ni</code>，即<code>new item</code>，例如使用<code>ni command.md</code>，可在当前位置创建一个名为<code>command</code>的<code>markdown</code>文件。</p>
+<p>④删除文件：<code>rm</code>，即<code>remove</code>，例如可使用<code>rm command.md</code>可把刚才创建的<code>command.md</code>文件删除。</p>
+<h5 id="五、一些常用技巧"><a href="#五、一些常用技巧" class="headerlink" title="五、一些常用技巧"></a>五、一些常用技巧</h5><p>①上下方向键可查看使用过的命令，可直接回车使用该命令。</p>
+<p>②<code>tab</code>键可自动补齐路径、文件夹或文件名称。</p>
+<p>③<code>pwd</code>命令<code>(print working directory)</code>可打印当前所在工作目录。</p>
+<p>④<code>ls</code>命令<code>(list)</code>可列出当前路径下的内容。</p>
+<p>⑤<code>cls</code>命令<code>(clear screen)</code>可对命令窗口进行清屏。</p>
+<h5 id="六、关于项目工程化"><a href="#六、关于项目工程化" class="headerlink" title="六、关于项目工程化"></a>六、关于项目工程化</h5><p>关于项目工程化的命令行，用得最多的肯定就是<code>npm</code>了，国内可是使用淘宝镜像<code>cnpm</code>，配置方法可<a href="http://npm.taobao.org/" target="_blank" rel="noopener">去这里</a>查看。</p>
+<p>1.<code>npm init</code>可生成<code>package.json</code>文件，用于管理依赖配置。<br>2.<code>cnpm install 依赖包名</code>可安装对应的依赖，可根据是在开发环境(开发时)还是生产环境(上线后)来加上<code>--save-dev</code>或<code>--save</code>。</p>
+<p>①例如安装<code>sass</code>模块：该依赖只需要在开发环境中使用，使用<code>cnpm install sass --save-dev</code>，该配置会在<code>package.json</code>文件的<code>devDependencies</code>节点写入依赖。</p>
+<p>②反之如<code>vuex</code>模块在生产环境中也是需要的，所以使用<code>cnpm install vuex --save</code>，该配置会在<code>package.json</code>文件的<code>dependencies</code>节点写入依赖。</p>
+<p>③还有需要全局安装的如：<code>webpack</code>的安装，<code>cnpm install webpack -g</code>，需要加上<code>-g</code>尾缀，因为它相当于是给你装上了一个全局的命令。</p>
+<p>在实际开发中我们可采用简写方式：<code>install</code>可简写为<code>i</code>，<code>--save-dev</code>可简写为<code>-S</code>，<code>--save</code>可简写为<code>-D</code>。</p>
+<h5 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h5><p>当然了，上述命令行也只是冰山一角，但实际开发中常用的也就那些，希望能给您带来些许帮助，如有不对或遗漏的地方，还望不吝赐教。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chenyulun</p>
+              <p class="site-description motion-element" itemprop="description">from now on</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、使用Powershell"><span class="nav-number">1.</span> <span class="nav-text">一、使用Powershell</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、打开命令窗口"><span class="nav-number">2.</span> <span class="nav-text">二、打开命令窗口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、进入目标文件夹"><span class="nav-number">3.</span> <span class="nav-text">三、进入目标文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、创建-amp-删除"><span class="nav-number">4.</span> <span class="nav-text">四、创建&amp;删除</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、一些常用技巧"><span class="nav-number">5.</span> <span class="nav-text">五、一些常用技巧</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、关于项目工程化"><span class="nav-number">6.</span> <span class="nav-text">六、关于项目工程化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最后"><span class="nav-number">7.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chenyulun</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
