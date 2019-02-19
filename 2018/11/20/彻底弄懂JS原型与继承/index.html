@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言本文由浅到深，循序渐进的将原型与继承的抽象概念形象化，且每个知识点都搭配相应的例子，尽可能的将其通俗化，而且本文最大的优点就是：长（为了更详细嘛）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="彻底弄懂JS原型与继承">
+<meta property="og:url" content="http://yoursite.com/2018/11/20/彻底弄懂JS原型与继承/index.html">
+<meta property="og:site_name" content="Chen&#39;s blog">
+<meta property="og:description" content="前言本文由浅到深，循序渐进的将原型与继承的抽象概念形象化，且每个知识点都搭配相应的例子，尽可能的将其通俗化，而且本文最大的优点就是：长（为了更详细嘛）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/20/1673086af5734900?w=569&h=297&f=png&s=19876">
+<meta property="og:updated_time" content="2019-02-19T03:59:22.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="彻底弄懂JS原型与继承">
+<meta name="twitter:description" content="前言本文由浅到深，循序渐进的将原型与继承的抽象概念形象化，且每个知识点都搭配相应的例子，尽可能的将其通俗化，而且本文最大的优点就是：长（为了更详细嘛）。">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/11/20/1673086af5734900?w=569&h=297&f=png&s=19876">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/20/彻底弄懂JS原型与继承/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>彻底弄懂JS原型与继承 | Chen's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>blog</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>archive</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/20/彻底弄懂JS原型与继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">彻底弄懂JS原型与继承
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-20 11:44:39" itemprop="dateCreated datePublished" datetime="2018-11-20T11:44:39+08:00">2018-11-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:59:22" itemprop="dateModified" datetime="2019-02-19T11:59:22+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文由浅到深，循序渐进的将原型与继承的抽象概念形象化，且每个知识点都搭配相应的例子，尽可能的将其通俗化，而且本文最大的优点就是：长（为了更详细嘛）。<br><a id="more"></a></p>
+<h2 id="一、原型"><a href="#一、原型" class="headerlink" title="一、原型"></a>一、原型</h2><p>首先，我们先说说原型，但说到原型就得从函数说起，因为原型对象就是指函数所拥有的<code>prototype</code>属性(所以下文有时说原型，有时说<code>prototype</code>，它们都是指原型)。</p>
+<h3 id="1-1-函数"><a href="#1-1-函数" class="headerlink" title="1.1 函数"></a>1.1 函数</h3><p>说到函数，我们得先有个概念：<strong>函数也是对象，和对象一样拥有属性</strong>，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">F.length   <span class="comment">// 2  指函数参数的个数</span></span><br><span class="line">F.constructor   <span class="comment">// function Function() &#123; [native code] &#125;</span></span><br><span class="line"><span class="keyword">typeof</span> F.prototype  <span class="comment">// "object"</span></span><br></pre></td></tr></table></figure>
+<p>从上面我们可以看出函数和对象一样拥有属性，我们重点说的就是<code>prototype</code>这个原型属性。</p>
+<p><code>prototype</code>也是一个对象，为了更形象的理解，我个人是把上述理解为这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// F这个函数对象里有个prototype对象属性</span></span><br><span class="line">F = &#123;</span><br><span class="line">    prototype: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面我们就说说这个<code>prototype</code>对象属性。</p>
+<h3 id="1-2-prototype对象的属性"><a href="#1-2-prototype对象的属性" class="headerlink" title="1.2 prototype对象的属性"></a>1.2 prototype对象的属性</h3><p><code>prototype</code>是一个对象，里面有个默认属性<code>constructor</code>，默认指向当前函数，我们依旧使用F这个函数来说明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">F = &#123;</span><br><span class="line">    prototype: &#123;</span><br><span class="line">        <span class="keyword">constructor</span>: F    // 指向当前函数</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>既然<code>prototype</code>是个对象，那我们也同样可以给它添加属性，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">F.prototype.name = <span class="string">'BetterMan'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 那F就变成如下：</span></span><br><span class="line">F = &#123;</span><br><span class="line">    prototype: &#123;</span><br><span class="line">        <span class="keyword">constructor</span>: F,</span><br><span class="line">        name: 'BetterMan'</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>prototype</code>就先铺垫到这，下面我们来说说对象，然后再把它们串起来。</p>
+<h3 id="1-3-创建对象"><a href="#1-3-创建对象" class="headerlink" title="1.3 创建对象"></a>1.3 创建对象</h3><p>创建对象有很多种方式，本文针对的是原型，所以就说说使用构造函数创建对象这种方式。上面的<code>F</code>函数其实就是一个构造函数（构造函数默认名称首字母大写便于区分），所以我们用它来创建对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> f = <span class="keyword">new</span> F();</span><br><span class="line"><span class="built_in">console</span>.log(f)  <span class="comment">// &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这时得到了一个“空”对象，下面我们过一遍构造函数创建对象的过程：</p>
+<ol>
+<li>创建一个新对象；</li>
+<li>将构造函数的作用域赋给新对象，即把this指向新对象（同时还有一个过程，新对象的<strong>proto</strong>属性指向构造函数的ptototype属性，后面会解释这块）。</li>
+<li>执行函数内代码，即为新对象添加属性。</li>
+<li>返回新对象（不需要写，默认返回this，this就是指新对象）。</li>
+</ol>
+<p>下面我们修改一下<code>F</code>构造函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再用<code>F</code>来创建一个实例对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> f1 = <span class="keyword">new</span> F(<span class="number">18</span>);  <span class="comment">// 18岁，别来无恙</span></span><br><span class="line"><span class="built_in">console</span>.log(f1); <span class="comment">// &#123;age: 18&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其实我们就得到了一个<code>f1</code>对象，里面有一个<code>age</code>属性，但真的只有<code>age</code>属性吗？上面我们讲到构造函数创建对象的过程，这里的新建对象，然后给对象添加属性，然后返回新对象，我们都是看得到的，还有一个过程，就是新对象的<code>__proto__</code>属性指向构造函数的<code>ptototype</code>属性。</p>
+<p>我们打印一下看看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(f1.__proto__);  <span class="comment">// &#123;constructor: F&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这不就是<code>F</code>构造函数的<code>prototype</code>对象吗？这个指向过程也就相当于<code>f1.__proto__ === F.prototype</code>，理解这个很重要！</p>
+<p><code>__proto__</code>我们可称为隐式原型（不是所有浏览器都支持这个属性，所以谷歌搞起），这个就厉害了，既然它指向了构造函数的原型，那我们获取到它也就能获取到构造函数的原型了（但一般我们不用这个方法获取原型，后面会介绍其他方法）。</p>
+<p>前面我们说了构造函数的<code>prototype</code>对象中的<code>constructor</code>属性是指向自身函数的，那我们用<code>__proto__</code>来验证一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(f1.__proto__.constructor);  <span class="comment">// F(age) &#123;this.age = age;&#125;</span></span><br><span class="line"><span class="comment">// 因为f1.__proto__ === F.prototype，所以上述就是指F.prototype.constructor</span></span><br></pre></td></tr></table></figure>
+<p>嗯，不错不错，看来没毛病！</p>
+<p>目前来说应该还是比较好理解的，那我们再看看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(f1.constructor);  <span class="comment">// F(age) &#123;this.age = age;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>额，这什么鬼？难道实例对象<code>f1</code>还有个<code>constructor</code>属性和构造函数原型的<code>constructor</code>一样都是指向构造函数？这就有点意思了。</p>
+<p>其实不是，应该是说<code>f1</code>的神秘属性<code>__proto__</code>指向了<code>F.prototype</code>，这相当于一个指向引用，如果要形象点的话可以把它理解为把<code>F.prototype</code>的属性”共享”到了<code>f1</code>身上，但这是动态的”共享”，如果后面<code>F.prototype</code>改变的话，<code>f1</code>所”共享”到的属性也会跟着改变。理解这个很重要！重要的事情说三遍！重要的事情说三遍！重要的事情说三遍！</p>
+<p>那我们再把代码”形象化”：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">F = &#123;</span><br><span class="line">    prototype: &#123;</span><br><span class="line">        <span class="keyword">constructor</span>: F</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">f1 = &#123;</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    __proto__: &#123;    <span class="comment">// 既然我们已经把这个形象化为"共享"属性了，那就再形象一点</span></span><br><span class="line">        <span class="keyword">constructor</span>: F</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 更形象化：</span><br><span class="line">f1 = &#123;</span><br><span class="line">    age: <span class="number">18</span>,  <span class="comment">// 这个是f1对象自身属性</span></span><br><span class="line">    <span class="keyword">constructor</span>: F  // 这个是从原型上"共享"的属性</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>既然我们说的是动态”共享”属性，那我们改一改构造函数的<code>prototype</code>属性看看<code>f1</code>会不会跟着改变：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 没改之前</span></span><br><span class="line"><span class="built_in">console</span>.log(f1.name);  <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改之后</span></span><br><span class="line">F.prototype.name = <span class="string">'BetterMan'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(f1);   <span class="comment">// &#123;age: 18&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(f1.name);  <span class="comment">// 'BetterMan'</span></span><br></pre></td></tr></table></figure>
+<p>A(读A第二调)……，看来和想的一毛一样啊，但是<code>f1</code>上面没看到<code>name</code>属性，那就是说我们只是可以从构造函数的原型上拿到<code>name</code>属性，而不是把<code>name</code>变为实例对象的自身属性。说到这里就得提提对象自身属性和原型属性（从原型上得来的属性）了。</p>
+<h3 id="1-4-对象自身属性和原型属性"><a href="#1-4-对象自身属性和原型属性" class="headerlink" title="1.4 对象自身属性和原型属性"></a>1.4 对象自身属性和原型属性</h3><p>我们所创建的实例对象<code>f1</code>，有自身属性<code>age</code>，还有从原型上找到的属性<code>name</code>，我们可以使用<code>hasOwnProperty</code>方法检测一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(f1.hasOwnProperty(<span class="string">'age'</span>));  <span class="comment">// true 说明是自身属性</span></span><br><span class="line"><span class="built_in">console</span>.log(f1.hasOwnProperty(<span class="string">'name'</span>)); <span class="comment">// false 说明不是自身属性</span></span><br></pre></td></tr></table></figure>
+<p>那既然是对象属性，应该就可以添加和删除吧？我们试试：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> f1.age;</span><br><span class="line"><span class="built_in">console</span>.log(f1.age); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> f1.name;</span><br><span class="line"><span class="built_in">console</span>.log(f1.name); <span class="comment">// 'BetterMan'</span></span><br></pre></td></tr></table></figure>
+<p>额，<code>age</code>属性删除成功了，但好像<code>name</code>没什么反应，比较坚挺，这就说明了<code>f1</code>对象可以掌控自身的属性，爱删删爱加加，但<code>name</code>属性是从原型上得到的，是别人的属性，你可没有权利去修改。</p>
+<p>其实我们在访问对象的<code>name</code>属性时，js引擎会依次查询<code>f1</code>对象上的所有属性，但是找不到这个属性，然后就会去创建<code>f1</code>实例对象的构造函数的原型上找（这就归功于神秘属性<strong>proto</strong>了，是它把实例对象和构造函数的原型联系了起来），然后找到了（如果再找不到的话，还会往上找，这就涉及到原型链了，后面我们会说到）。而找<code>age</code>属性时直接就在<code>f1</code>上找到了，就不用再去其他地方找了。</p>
+<p>到现在大家应该对原型有了个大概的理解了吧，但它有什么用呢？<br>用处大大的，可以说我们无时无刻都在使用它，下面我们继续。</p>
+<h2 id="二、继承"><a href="#二、继承" class="headerlink" title="二、继承"></a>二、继承</h2><p>讲了原型，那肯定是离不开继承这个话题的，说到继承就很热闹了，什么原型模式继承、构造函数模式继承、对象模式继承、属性拷贝模式继承、多重继承、寄生式继承、组合继承、寄生组合式继承……这什么鬼？这么多，看着是不是很头疼？</p>
+<p>我个人就把它们分为原型方式、构造函数方式、对象方式这三个方式，然后其他的继承方式都是基于这三个方式的组合，当然这只是我个人的理解哈，下面我们开始。</p>
+<h3 id="2-1-原型链"><a href="#2-1-原型链" class="headerlink" title="2.1 原型链"></a>2.1 原型链</h3><p>说到继承，肯定得说原型链，因为原型链是继承的主要方法。</p>
+<p>我们先来简单的回顾一下构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针（<code>constructor</code>），而实例包含一个指向原型对象的内部指针（<code>__proto__</code>）。那么，假如我们让原型对象等于另一个实例对象，结果会怎么样呢？显然，此时的原型对象将包含一个指向<strong>另一个原型</strong>的指针（<code>__proto__</code>），相应的，<strong>另一个原型</strong>中也包含着一个指向另一个构造函数的指针（<code>constructor</code>）。那假如<strong>另一个原型</strong>又是另一个对象实例，那么上述关系依然成立，如此层层递进，就构成了实例与原型的链条。这就是所谓的原型链，如图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/20/1673086af5734900?w=569&amp;h=297&amp;f=png&amp;s=19876" alt></p>
+<p>到这里千万不要乱，一定要理解了这段话再往下看，其实就是把<strong>别人的实例对象</strong>赋值给了我们的构造函数的原型，这就是第一层，然后如果<strong>别人的实例对象</strong>的构造函数的原型又是另一个人的实例对象的话，那不是一样的道理吗？这就是第二层，那如果再出现个第三者，那又是一层了，这就构成了一个层层连起来的原型链。</p>
+<p>好了，如果你看到了这里，说明已经理解了上述”链情”，那我们就开始搞搞继承。</p>
+<h3 id="2-2-继承方式"><a href="#2-2-继承方式" class="headerlink" title="2.2 继承方式"></a>2.2 继承方式</h3><p>继承有多重形式，我们一个个来，分别对比一下其中的优缺点。</p>
+<blockquote>
+<p>注：因为多数继承都依赖于原型及原型链，所以当再依赖于其他方式时，我就以这个方式来命名这个继承方式，这样看起来就不会那么复杂。</p>
+</blockquote>
+<p><strong>1. 基于构造函数方式</strong></p>
+<p>我们先定义三个构造函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'A'</span>;</span><br><span class="line">    <span class="keyword">this</span>.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 构造函数B</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'B'</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 构造函数C</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">C</span>(<span class="params">width, height</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'C'</span>;</span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">    <span class="keyword">this</span>.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.width * <span class="keyword">this</span>.height;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面我们试试继承：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">B.prototype = <span class="keyword">new</span> A();</span><br><span class="line">C.prototype = <span class="keyword">new</span> B();</span><br></pre></td></tr></table></figure>
+<p>上述是不是有点熟悉，是不是就是前面所提的原型链的概念：B构造函数的原型被赋上A构造函数的实例对象，然后C的原型又被赋上B构造函数的实例对象。</p>
+<p>然后我们用C构造函数来创建一个实例对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c1 = <span class="keyword">new</span> C(<span class="number">2</span>, <span class="number">6</span>);</span><br><span class="line"><span class="built_in">console</span>.log(c1);   <span class="comment">// &#123;name: "C", width: 2, height: 6, getArea: ƒ&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(c1.name);  <span class="comment">// 'C'</span></span><br><span class="line"><span class="built_in">console</span>.log(c1.getArea()); <span class="comment">// 12</span></span><br><span class="line"><span class="built_in">console</span>.log(c1.say());  <span class="comment">// 'C'</span></span><br></pre></td></tr></table></figure>
+<p><code>c1</code>居然有<code>say</code>方法了，可喜可贺，它是怎么做到的？让我们来捋捋这个过程：</p>
+<ul>
+<li>①首先<code>C</code>新建了一个”空”对象；</li>
+<li>②然后this指向这个”空”对象；</li>
+<li>③c1.<strong>proto</strong>指向C.prototype;</li>
+<li>④给this对象赋值，这样就有了<code>name</code>、<code>width</code>、<code>height</code>、<code>getArea</code>这四个自身属性；</li>
+<li>⑤返回this对象，此时我们就得到了<code>c1</code>实例对象；</li>
+<li>⑥然后打印<code>console.log(c1)</code>和<code>console.log(c1.name)</code>，<code>console.log(c1.getArea())</code>都好理解；</li>
+<li>⑦接着<code>console.log(c1.say())</code>，这就得去找<code>say</code>方法了，js引擎先在<code>c1</code>身上找，没找到，然后<code>c1.__proto__</code>这个神秘链接是指向<code>C</code>构造函数的原型的，然后就去<code>C.prototype</code>上找，然后我们是写有<code>C.prototype = new B()</code>的，也就是说是去<code>B</code>构造函数的实例对象上找，还是没有，那继续，又通过<code>new B().__proto__</code>去<code>B</code>的原型上找，然后我们是写有<code>B.prototype = new A();</code>，那就是去<code>A</code>所创建的实例对象上找，没有，那就又跑去<code>A</code>构造函数的原型上找，OK！找到！</li>
+</ul>
+<p>这个过程就相当于这样：<br><code>c1 —→ C.prototype —→ new B() —→ B.prototype —→ new A() —→ A.prototype</code></p>
+<p>这就是上述的一个基于构造函数方式的继承过程，其实就是一个查找过程，但是大家有没有发现什么？</p>
+<p>上述方式存在两个问题：第一个问题就是<code>constructor</code>的指向。</p>
+<p>本来<code>B.prototype</code>中的<code>constructor</code>指向好好的，是指向<code>B</code>的，但现在<code>B.prototype</code>完全被<code>new A()</code>给替换了，那现在的<code>B.prototype.constructor</code>是指向谁的？我们看看：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(B.prototype.constructor);  <span class="comment">// ƒ A() &#123;&#125;</span></span><br><span class="line"><span class="keyword">let</span> b1 = <span class="keyword">new</span> B();</span><br><span class="line"><span class="built_in">console</span>.log(b1.constructor);   <span class="comment">// ƒ A() &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时我们发现不仅是<code>B.prototype.constructor</code>指向<code>A</code>，连<code>b1</code>也是如此，别忘了<code>b1</code>中的<code>constructor</code>属性也是由<code>B.prototype</code>所共享的，所以老大（<code>B</code>）改变了，小弟(<code>b1</code>)当然也会跟着动态改变。</p>
+<p>但现在它们为什么是指向<code>A</code>的呢？因为<code>B.prototype</code>被替换为了<code>new A()</code>，那<code>new A()</code>里有什么？我们再把<code>B.prototype</code>和<code>new A()</code>形象化来表示一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">A = &#123;</span><br><span class="line">    prototype：&#123;</span><br><span class="line">        <span class="keyword">constructor</span>: A</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">new A() = &#123;</span><br><span class="line">    name: <span class="string">'A'</span>,</span><br><span class="line">    say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">constructor</span>: A       // 由__proto__的指向所共享得到的</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">B = &#123;</span><br><span class="line">    prototype：&#123;</span><br><span class="line">        <span class="keyword">constructor</span>: B</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 这时把B.prototype换为new A()，那就变成了这样：</span><br><span class="line">B = &#123;</span><br><span class="line">    prototype：&#123;</span><br><span class="line">        name: <span class="string">'A'</span>,</span><br><span class="line">        say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">constructor</span>: A   // 所以指向就变成了A</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>所以我们要手动修正<code>B.prototype.constructor</code>的指向，同理<code>C.prototype.constructor</code>的指向也是如此：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">B.prototype = <span class="keyword">new</span> A();</span><br><span class="line">B.prototype.constructor = B;</span><br><span class="line">C.prototype = <span class="keyword">new</span> B();</span><br><span class="line">C.prototype.constructor = C;</span><br></pre></td></tr></table></figure>
+<p>第一个问题解决了，到第二个问题：效率的问题。</p>
+<p>当我们用某一个构造函数创建对象时，其属性就会被添加到this中去。并且当别添加的属性实际上是不会随着实例改变时，这种做法会显得没有效率。例如在上面的实例中，<code>A</code>构造函数是这样定义的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'A'</span>;</span><br><span class="line">    <span class="keyword">this</span>.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种实现意味着我们用<code>new A()</code>创建的每个实例都会拥有一个全新的<code>name</code>属性和<code>say</code>属性，并在内存中拥有独立的存储空间。所以我们应该考虑把这些属性放到原型上，让它们实现共享：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">A.prototype.name = <span class="string">'A'</span>;</span><br><span class="line">A.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数B</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">B.prototype.name = <span class="string">'B'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数C</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">C</span>(<span class="params">width, height</span>) </span>&#123;  <span class="comment">// 此处的width和height属性是随参数变化的，所以就不需要改为共享属性</span></span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">&#125;;</span><br><span class="line">C.prototype.name = <span class="string">'C'</span>;</span><br><span class="line">C.prototype.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.width * <span class="keyword">this</span>.height;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样一来，构造函数所创建的实例中一些属性就不再是私有属性了，而是在原型中能共享的属性，现在我们来试试：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> test1 = <span class="keyword">new</span> A();</span><br><span class="line"><span class="keyword">let</span> test2 = <span class="keyword">new</span> A();</span><br><span class="line"><span class="built_in">console</span>.log(test1.say === test2.say);  <span class="comment">// true 没改为共享属性前，它们是不相等的</span></span><br></pre></td></tr></table></figure>
+<p>虽然这样做通常更有效率，但也只是针对实例中不可变属性而言的，所以在定义构造函数时我们也要考虑哪些属性适合共享，哪些适合私有（且一定要继承后再对原prototype进行扩展和矫正constructor）。</p>
+<p><strong>2. 基于原型的方式</strong></p>
+<p>正如上面所做的，处于效率考虑，我们应当尽可能的将一些可重用的属性和方法添加到原型中去，这样的话我们仅仅依靠原型就可以完成继承关系的构建了，由于原型上的属性都是可重用的，这也意味着从原型上继承比在实例上继承要好得多，而且既然需要继承的属性都放在了原型上，又何必生成实例降低效率，然后又从所生成的实例中继承不需要的私有属性呢？所以我们直接抛弃实例，从原型上继承：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">A.prototype.name = <span class="string">'A'</span>;</span><br><span class="line">A.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数B</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">B.prototype = A.prototype;  <span class="comment">//  先继承，再进行constructor矫正和B.prototype的扩展</span></span><br><span class="line">B.prototype.constructor = B; </span><br><span class="line">B.prototype.name = <span class="string">'B'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数C</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">C</span>(<span class="params">width, height</span>) </span>&#123;  <span class="comment">// 此处的width和height属性是随参数变化的，所以就不需要改为共享属性</span></span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">&#125;;</span><br><span class="line">C.prototype = B.prototype;</span><br><span class="line">C.prototype.constructor = C; <span class="comment">//  先继承，再进行constructor矫正和C.prototype的扩展</span></span><br><span class="line">C.prototype.name = <span class="string">'C'</span>;</span><br><span class="line">C.prototype.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.width * <span class="keyword">this</span>.height;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>嗯，这样感觉效率高多了，也比较养眼，然后我们试试效果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> b2 = <span class="keyword">new</span> B();</span><br><span class="line"><span class="built_in">console</span>.log(b2.say());  <span class="comment">// 'C'</span></span><br></pre></td></tr></table></figure>
+<p>(⊙o⊙)…不是应该打印出<code>B</code>的吗？怎么和我内心的小完美不太一样？</p>
+<p>想必大家应该都看出来了，上面的继承方式其实就相当于<code>A、B、C</code>全都共享了同一个原型，那就造成了引用问题，在后面对<code>C</code>原型上的<code>name</code>属性进行了修改，所以此时<code>A</code>、<code>B</code>、<code>C</code>的原型的name属性都为’C’，此时真的是受制于人啊。</p>
+<p>有没有两全其美的办法，我又要效率，又不想受制于人，啪！把这两个方法结合起来不就行了吗？！</p>
+<p><strong>3. 结合构造函数方式和原型的方式</strong></p>
+<p>我既想快，又不想被别人管，搞个第三者来解决怎么样？（怎么感觉听起来怪怪的）。我们在它们中间使用一个临时构造函数（所以也可称为临时构造法）来做个桥梁，把小弟管大哥的关系断掉（腿打断），然后大家又可以高效率的合作：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">A.prototype.name = <span class="string">'A'</span>;</span><br><span class="line">A.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数B</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> X = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;   <span class="comment">// 新建一个"空"属性的构造函数</span></span><br><span class="line">X.prototype = A.prototype;  <span class="comment">// 将X的原型指向A的原型</span></span><br><span class="line">B.prototype = <span class="keyword">new</span> X();  <span class="comment">// B的原型指向X创建的实例对象</span></span><br><span class="line">B.prototype.constructor = B;  <span class="comment">// 记得修正指向</span></span><br><span class="line">B.prototype.name = <span class="string">'B'</span>;       <span class="comment">// 扩展</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数C</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">C</span>(<span class="params">width, height</span>) </span>&#123;  <span class="comment">// 此处的width和height属性是随参数变化的，所以就不需要改为共享属性</span></span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 同上</span></span><br><span class="line"><span class="keyword">let</span> Y = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;  </span><br><span class="line">Y.prototype = B.prototype;</span><br><span class="line">C.prototype = <span class="keyword">new</span> Y();</span><br><span class="line">C.prototype.constructor = C;</span><br><span class="line">C.prototype.name = <span class="string">'C'</span>;</span><br><span class="line">C.prototype.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.width * <span class="keyword">this</span>.height;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>现在试试效果怎么样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c3 = <span class="keyword">new</span> C;</span><br><span class="line"><span class="built_in">console</span>.log(c3.say());  <span class="comment">// A</span></span><br></pre></td></tr></table></figure>
+<p>稳！这样我们既不是直接继承实例上的属性，而是继承原型所共享的属性，而且还能通过<code>X</code>和<code>Y</code>这两个”空”属性构造函数来把<code>A和B</code>上的非共享属性过滤掉（因为<code>new X()</code>比起<code>new A()</code>所生成的实例，因为<code>X</code>是空的，所以不会生成的对象不会存在私有属性，但是<code>new A()</code>可能会存在私有属性，既然是私有属性，所以也就是不需要被继承，所以<code>new A()</code>会存在效率问题和多出不需要的继承属性）。</p>
+<p><strong>4. 基于对象的方式</strong></p>
+<p>这种基于对象的方式其实包括几种方式，因为都和对象相关，所以我就统称为对象方式了，下面一一介绍：</p>
+<p><strong>①以接收对象的方式</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params">o</span>) </span>&#123;  <span class="comment">// o是所要继承的父对象</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();  <span class="comment">// 返回一个实例对象</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">    name: <span class="string">'better'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(create(a).name);  <span class="comment">// 'better'</span></span><br></pre></td></tr></table></figure>
+<p>这种方式是接受一个父对象后返回一个实例，进而达到继承的效果，有没有点似曾相识的感觉？这不就是低配版的<code>Object.create()</code>吗？有兴趣的可以多去了解了解。所以这个方式其实也应该称为”原型继承法”，因为也是以修改原型为基础的，但又和对象相关，所以我就把它归为对象方式了，这样比较好分类。</p>
+<p><strong>②以拷贝对象属性的方式</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接将父原型的属性拷贝过来，好处是Child.prototype.constructor没被重置，但这种方式仅适用于只包含基本数据类型的对象，且父对象会覆盖子对象的同名属性</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">Child, Parent</span>) </span>&#123;   <span class="comment">// Child, Parent都为构造函数</span></span><br><span class="line">    <span class="keyword">let</span> c = Child.prototype;</span><br><span class="line">    <span class="keyword">let</span> p = Parent.prototype;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> p) &#123;</span><br><span class="line">        c[i] = p[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这种直接拷贝属性的方式简单粗暴，直接复制传入的对象属性，但还是存在引用类型的问题</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extendCopy</span>(<span class="params">p</span>) </span>&#123;   <span class="comment">// p是被继承的对象</span></span><br><span class="line">    <span class="keyword">let</span> c = &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> p) &#123;</span><br><span class="line">        c[i] = p[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上面的extendCopy可称为浅拷贝，没有解决引用类型的问题，现在我们使用深拷贝，这样就解决了引用类型属性的问题，因为不管你有多少引用类型，全都一个个拷过来</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span>(<span class="params">p, c</span>) </span>&#123;  <span class="comment">// c和p都是对象</span></span><br><span class="line">    c = c || &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> p) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p.hasOwnProperty[i]) &#123;   <span class="comment">// 排除继承属性</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span> p[i] === <span class="string">'object'</span>) &#123;  <span class="comment">// 解决引用类型</span></span><br><span class="line">                c[i] = <span class="built_in">Array</span>.isArray(p[i]) ? [] : &#123;&#125;;</span><br><span class="line">                deepCopy[p[i], c[i]];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                c[i] = p[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>③拷贝多对象属性的方式</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这种方式就可以一次拷贝多个对象属性，也称为多重继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">multi</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> n = &#123;&#125;,</span><br><span class="line">    stuff,</span><br><span class="line">    j = <span class="number">0</span>,</span><br><span class="line">    len = <span class="built_in">arguments</span>.length;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">        stuff = <span class="built_in">arguments</span>[j];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> stuff) &#123;</span><br><span class="line">            <span class="keyword">if</span> (stuff.hasOwnProperty(i)) &#123;</span><br><span class="line">                n[i] = stuff[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> n</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>④吸收对象属性并扩展的方式</strong></p>
+<p>这种方式其实应该叫做”寄生式继承”，这名字乍看很抽象，其实也就那么回事，所以也把它分到对象方式里：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其实也就是在创建对象的函数中吸收了其它对象的属性（寄生兽把别人的xx吸走），然后对其扩展并返回</span></span><br><span class="line"><span class="keyword">let</span> parent = &#123;</span><br><span class="line">    name: <span class="string">'parent'</span>,</span><br><span class="line">    toString: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">raise</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> that = create(parent);  <span class="comment">// 使用前面我们写过的create函数</span></span><br><span class="line">    that.other = <span class="string">'Once in a blue moon!'</span>; <span class="comment">// 今天学的，丑显呗一下</span></span><br><span class="line">    <span class="keyword">return</span> that;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和对象相关的方式是不是有点多？但其实也都是围绕着对象属性的，理解这点就好理解了，下面继续。</p>
+<p><strong>5. 构造函数借用法</strong></p>
+<p>这个方式其实也可归为构造函数方式，但比较溜，所以单独拎出来溜溜（这是最后一个了，我保证）。</p>
+<p>我们再把之前定义的老函数<code>A</code>拿出来炒炒：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'A'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">A.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数D</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">D</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    A.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);  <span class="comment">// 这里就相当于借用A构造函数把A中属性创建给了D，即name和say属性</span></span><br><span class="line">&#125;;</span><br><span class="line">D.prototype = <span class="keyword">new</span> A();  <span class="comment">// 这里负责拿到A原型上的属性</span></span><br><span class="line">D.prototype.name = <span class="string">'D'</span>;  <span class="comment">// 继承后再进行扩展</span></span><br></pre></td></tr></table></figure>
+<p>这样两个步骤是不是就把A的自身属性和原型属性都搞定了？简单完美！</p>
+<p>等等，看起来好像有点不对，<code>A.apply(this, arguments)</code>已经完美的把<code>A</code>自身属性变为了<code>D</code>的自身属性，但是<code>D.prototype = new A()</code>又把<code>A</code>的自身属性继承了一次，真是多此一举，既然我们只是单纯的想要原型上的属性，那直接拷贝不就完事了吗？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数A</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">'A'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">A.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 之前定义的属性拷贝函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend2</span>(<span class="params">Child, Parent</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> c = Child.prototype;</span><br><span class="line">    <span class="keyword">let</span> p = Parent.prototype;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> p) &#123;</span><br><span class="line">        c[i] = p[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数D</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">D</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    A.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);  <span class="comment">// 这里就相当于借用A构造函数把A中属性创建给了D，即name和say属性</span></span><br><span class="line">&#125;;</span><br><span class="line">extend2(D, A);  <span class="comment">// 这里就直接把A原型的属性拷贝给了D原型</span></span><br><span class="line">D.prototype.name = <span class="string">'D'</span>;  <span class="comment">// 继承后在进行扩展</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> d1 = <span class="keyword">new</span> D();</span><br><span class="line"><span class="built_in">console</span>.log(d1.name);  <span class="comment">// 'A'</span></span><br><span class="line"><span class="built_in">console</span>.log(d1.__proto__.name)  <span class="comment">// undefined 这就说明了name属性是新建的，而不是继承得到的</span></span><br></pre></td></tr></table></figure>
+<p>(⊙o⊙)…，其实还有其它的继承方法，还是不写了，怕被打，但其实来来去去就是基于原型、构造函数、对象这几种方式搞来搞去，我个人就是这么给它们分类的，毕竟七秒记忆放不下，囧。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>写到这里，终于咽下了最后一口气，呸，松了一口气。也感谢你看到了最后，希望对你有所帮助，有写得不对的地方还请多多指教，喜欢的就关注一波吧，后续会持续更新。</p>
+<p><a href="https://github.com/chen-yulun/inherits" target="_blank" rel="noopener">github源码</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/12/webpack4.x最详细入门讲解/" rel="next" title="webpack4.x最详细入门讲解">
+                <i class="fa fa-chevron-left"></i> webpack4.x最详细入门讲解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/21/你可能遗漏的JS知识点(一)/" rel="prev" title="你可能遗漏的JS知识点(一)">
+                你可能遗漏的JS知识点(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">陈煜仑</p>
+              <p class="site-description motion-element" itemprop="description">种一棵树最好的时间是十年前，还有现在</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、原型"><span class="nav-number">2.</span> <span class="nav-text">一、原型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-函数"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-prototype对象的属性"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 prototype对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-创建对象"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 创建对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-对象自身属性和原型属性"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 对象自身属性和原型属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、继承"><span class="nav-number">3.</span> <span class="nav-text">二、继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-原型链"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 原型链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-继承方式"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 继承方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈煜仑</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="theme-info"><a href="https://github.com/chen-yulun" class="theme-link" rel="noopener" target="_blank">GitHub</a> - <a href="https://juejin.im/user/5ba9ea3c5188255c8b6ef168/posts" class="theme-link" rel="noopener" target="_blank">掘金博客</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

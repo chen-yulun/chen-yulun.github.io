@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言npm(Node Package Manager)，一个Node的包管理器，平时我们常用的公共模块（插件）或者叫做包大多都放在上面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不会发布node包？进来看看">
+<meta property="og:url" content="http://yoursite.com/2018/11/05/不会发布node包？进来看看/index.html">
+<meta property="og:site_name" content="Chen&#39;s blog">
+<meta property="og:description" content="前言npm(Node Package Manager)，一个Node的包管理器，平时我们常用的公共模块（插件）或者叫做包大多都放在上面。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e19cf5aaa80ad?w=734&h=271&f=png&s=66944">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1877ebcd6dba?w=201&h=144&f=png&s=4728">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e187e1bf693c1?w=587&h=200&f=png&s=48493">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1882a20ef425?w=541&h=27&f=png&s=8357">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1898bcd2649c?w=568&h=42&f=png&s=14163">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e189ea51f1ee3?w=1011&h=210&f=png&s=65446">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e18a18cf14658?w=602&h=198&f=png&s=15419">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e190ad44a9f7e?w=569&h=106&f=png&s=8229">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1920767002a1?w=548&h=51&f=png&s=6587">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1925f5d9a973?w=716&h=130&f=png&s=11872">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e192d8b242349?w=226&h=71&f=png&s=2476">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e193b32e255f1?w=252&h=333&f=png&s=17906">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e193f3230aac7?w=517&h=151&f=png&s=34617">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e194d6df1e847?w=1000&h=203&f=png&s=63288">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1952be1bcb7a?w=463&h=322&f=png&s=21526">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e19566a4c73ec?w=489&h=162&f=png&s=6808">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e195d47c7efc9?w=310&h=141&f=png&s=6172">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e19648c7c25ac?w=996&h=289&f=png&s=12517">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e1967ded0de7d?w=690&h=690&f=jpeg&s=94347">
+<meta property="og:updated_time" content="2019-02-19T03:47:34.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不会发布node包？进来看看">
+<meta name="twitter:description" content="前言npm(Node Package Manager)，一个Node的包管理器，平时我们常用的公共模块（插件）或者叫做包大多都放在上面。">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/11/5/166e19cf5aaa80ad?w=734&h=271&f=png&s=66944">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/05/不会发布node包？进来看看/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>不会发布node包？进来看看 | Chen's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>blog</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>archive</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/05/不会发布node包？进来看看/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">不会发布node包？进来看看
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 11:43:15" itemprop="dateCreated datePublished" datetime="2018-11-05T11:43:15+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:47:34" itemprop="dateModified" datetime="2019-02-19T11:47:34+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>npm(Node Package Manager)，一个Node的包管理器，平时我们常用的公共模块（插件）或者叫做包大多都放在上面。<br><a id="more"></a>所以接下来要封装的插件，我们就简单称它为npm包，本文从就从这个简单的例子开始，逐步对它进行封装-发布-更新-扩展-使用，进而到得一个相对完整的npm包，下面开始。</p>
+<h3 id="一、一个最简单的npm包"><a href="#一、一个最简单的npm包" class="headerlink" title="一、一个最简单的npm包"></a>一、一个最简单的npm包</h3><h4 id="1-1-新建文件夹"><a href="#1-1-新建文件夹" class="headerlink" title="1.1 新建文件夹"></a>1.1 新建文件夹</h4><p>   可以找个地方直接建个文件夹，最好语义化一点，这样以后也方便管理，我们这里用终端建文件夹：<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir toupper-case-project   // 这里我们建了一个名为toupper-case-project的文件夹</span><br></pre></td></tr></table></figure></p>
+<p>(对命令行还不太熟的小伙伴可以看看我这篇博客<a href="https://juejin.im/post/5ba9ead06fb9a05d26596151" target="_blank" rel="noopener">命令行不会？看这里</a>)</p>
+<h4 id="1-2-初始化项目"><a href="#1-2-初始化项目" class="headerlink" title="1.2 初始化项目"></a>1.2 初始化项目</h4><p>在项目根目录下使用一下命令<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure></p>
+<p>这时终端会提示你输入诸如包名，版本号等信息，如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e19cf5aaa80ad?w=734&amp;h=271&amp;f=png&amp;s=66944" alt></p>
+<p>当然，你可以一路回车下来，或者你使用<code>npm init -y</code>就可以生成默认的<code>package.json</code>文件，效果都是一样的，然后我们得到以下文件，简单说明一下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// package.json</span><br><span class="line">&#123;</span><br><span class="line">  "name": "toupper-case-project",  // 包名称，默认和你文件夹同名，可改，但是需要去npm官网搜素这个名称是否已存在，因为包名不能重复</span><br><span class="line">  "version": "1.0.0",  // 项目默认版本号，可改，如果项目后期更新再发布，则需要修改版本号</span><br><span class="line">  "description": "",   // 项目描述，选填，可利于SEO </span><br><span class="line">  "main": "index.js",  // 你的包的主要入口路径，就是别人安装了你的包后系统会去这个路径找你的代码</span><br><span class="line">  "scripts": &#123;         // 脚本命令，后面会讲到，现在使用默认的就行</span><br><span class="line">    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"</span><br><span class="line">  &#125;,</span><br><span class="line">  "author": "",        // 作者，选填</span><br><span class="line">  "license": "ISC"     // 许可证，默认即可</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：以上代码使用时记得把注释删除，json不能注释</p>
+</blockquote>
+<h4 id="1-3-新建项目文件"><a href="#1-3-新建项目文件" class="headerlink" title="1.3 新建项目文件"></a>1.3 新建项目文件</h4><p>根目录下新建<code>index.js</code>和<code>upper.js</code>两个文件分别如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// upper.js</span></span><br><span class="line"><span class="keyword">let</span> toUpper = <span class="function">(<span class="params">a</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a.toUpperCase();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> toUpper;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> toUpper <span class="keyword">from</span> <span class="string">'./upper.js'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> toUpper;</span><br></pre></td></tr></table></figure>
+<p>此时我们的项目就应该只有三个文件，如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1877ebcd6dba?w=201&amp;h=144&amp;f=png&amp;s=4728" alt></p>
+<p><code>upper.js</code>用于项目功能逻辑，<code>index.js</code>用于导出功能模块，<code>package.json</code>用于配置相关信息，这样我们就把一个最简单的<code>npm</code>包写好了，接下里进入发布。</p>
+<h4 id="1-4-发布"><a href="#1-4-发布" class="headerlink" title="1.4 发布"></a>1.4 发布</h4><p><strong>1.注册npm账号</strong></p>
+<p>前往<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm官网</a>注册一个账号，记好账户名、密码和邮箱（邮箱收到邮件后一定要进行验证）。<br>&nbsp;</p>
+<p><strong>2.源切换</strong></p>
+<p>这是个坑，估计很多小伙伴都踩过，毕竟国内<code>npm</code>的速度令人感动，所以大家都运行过一条熟悉的命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></p>
+<p>但是发布时我们一定要把源切换回<code>npm</code>，而不是淘宝源，当然，直接运行下面这个命令即可解决：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry=http://registry.npmjs.org</span><br></pre></td></tr></table></figure></p>
+<p>但是老这样切来切去有点low啊，这时候<code>nrm</code>就派上用场了，<code>nrm</code>是什么？简单点说<code>nrm</code>就是专门用来管理和快速切换私人配置的registry的一个工具。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i nrm -g</span><br></pre></td></tr></table></figure></p>
+<p>安装好后使用<code>nrm ls</code>命令会显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e187e1bf693c1?w=587&amp;h=200&amp;f=png&amp;s=48493" alt></p>
+<p><code>*</code>号在哪个地方就说明现在的源是哪个（我现在处在taobao源），也许你刚开始不显示<em>号，但不管显不显示，直接运行<code>nrm use npm</code>，然后再<code>npm ls</code>，这时候就发现`</em><code>指在</code>npm`源上了，此时就可以进行下一步了。<br>&nbsp;</p>
+<p><strong>3.登录</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm login</span><br></pre></td></tr></table></figure></p>
+<p>然后会提示你输入用户名、密码（是密文的，你看不见，直接输就行）和邮箱，登录成功后会显示:</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1882a20ef425?w=541&amp;h=27&amp;f=png&amp;s=8357" alt></p>
+<p>&nbsp;<br><strong>4.试着发布npm包</strong></p>
+<p>在项目根目录下运行<code>npm publish</code>即可发布，顺利的话就直接成功了，当然也可能会遇到问题：</p>
+<ul>
+<li><p>第一个就是权限问题，也许报这样的错误<code>npm ERR! Error: EPERM: operation not permitted</code>，这时候就得使用管路员权限来进行发布了，<code>window + x</code>会看到管理员终端选项，打开这个终端，然后再进行登录，发布即可。</p>
+</li>
+<li><p>第二个就是名称问题，就是你的包名在npm上已经存在了，所以在<code>package.json</code>中将你的包名改成其他的，这样再发布，应该就没问题了。</p>
+</li>
+</ul>
+<p>发布成功后显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1898bcd2649c?w=568&amp;h=42&amp;f=png&amp;s=14163" alt></p>
+<h4 id="1-5-用用我们发布的包"><a href="#1-5-用用我们发布的包" class="headerlink" title="1.5 用用我们发布的包"></a>1.5 用用我们发布的包</h4><p>随便找个练手项目试试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i toupper-case-project -D</span><br></pre></td></tr></table></figure></p>
+<p>安装完成：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e189ea51f1ee3?w=1011&amp;h=210&amp;f=png&amp;s=65446" alt></p>
+<p>说明我们的包是可以下载安装的，然后试试功能，我就直接在vue项目中试试了，大家应该看得懂：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e18a18cf14658?w=602&amp;h=198&amp;f=png&amp;s=15419" alt></p>
+<p>然后运行项目：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e190ad44a9f7e?w=569&amp;h=106&amp;f=png&amp;s=8229" alt></p>
+<p>搞定！那如果我们后期把这个包改了呢，该怎么做？</p>
+<h4 id="1-6-更新包"><a href="#1-6-更新包" class="headerlink" title="1.6 更新包"></a>1.6 更新包</h4><p>我们把<code>upper.js</code>文件改一改：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// upper.js</span></span><br><span class="line"><span class="keyword">let</span> toUpper = <span class="function">(<span class="params">a</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello'</span> + a.toUpperCase();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> toUpper;</span><br></pre></td></tr></table></figure>
+<p>然后记得把<code>package.json</code>中的版本号也改了，正常来说加1即可，<br>将<code>&quot;version&quot;: &quot;1.0.0&quot;</code>改为<code>&quot;version&quot;: &quot;1.0.1&quot;</code></p>
+<p>现在运行<code>npm publish</code>就可以直接把新的包覆盖上去：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1920767002a1?w=548&amp;h=51&amp;f=png&amp;s=6587" alt></p>
+<p>然后我们在练手项目中怎么更新这个包呢？</p>
+<ul>
+<li><p>方法一（直接更新）：<code>cnpm update toupper-case-project</code>（有时可能更新不完全）</p>
+</li>
+<li><p>方法二（安装覆盖）：<code>cnpm i toupper-case-project -D</code>（这个比较靠谱）</p>
+</li>
+</ul>
+<p>然后运行项目：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1925f5d9a973?w=716&amp;h=130&amp;f=png&amp;s=11872" alt></p>
+<p>完美！这就是一个最简单的npm包，是不是没有想象中的那么触不可及？但说实话，这个包确实挺low，你看别人的包还经过打包啊、测试啊、还能在vue中直接Vue.use()方式来使用，而且还有交互。那下面我们就来试试。</p>
+<h3 id="二、基于webpack和vue的npm包"><a href="#二、基于webpack和vue的npm包" class="headerlink" title="二、基于webpack和vue的npm包"></a>二、基于webpack和vue的npm包</h3><p>直接使用vue-cli的话会带上许多我们不需要的模块，太笨重，所以我们直接撸一个，如果对<code>webpack</code>还不太熟悉的，可以看看我这篇<a href="https://juejin.im/post/5bd66efcf265da0a8a6af2d2" target="_blank" rel="noopener">webpack4.x最详细入门讲解</a></p>
+<h4 id="2-1-构建项目（星级评价组件）"><a href="#2-1-构建项目（星级评价组件）" class="headerlink" title="2.1 构建项目（星级评价组件）"></a>2.1 构建项目（星级评价组件）</h4><p>我们来封装一个可根据传入的评分数来显示星级的组件，类似这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e192d8b242349?w=226&amp;h=71&amp;f=png&amp;s=2476" alt></p>
+<p>具体代码请移步<a href="https://github.com/Better-Alan/star-evaluation" target="_blank" rel="noopener">github</a>，请反手给个 ★ Star ^_~，下面开始：</p>
+<p>首先新建一个名为<code>star-evaluation</code>的项目文件夹；<br>然后根据以下结构建立项目文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">|——src</span><br><span class="line">|    |——images</span><br><span class="line">|    |     |——star24_half@2x.png</span><br><span class="line">|    |     |——star24_off@2x.png</span><br><span class="line">|    |     |——star24_on@2x.png</span><br><span class="line">|    |——index.js</span><br><span class="line">|    |——Star.vue</span><br><span class="line">|——.npmignore  // 用于忽略不需要上传到npm的文件</span><br><span class="line">|——package.json</span><br><span class="line">|——README.md</span><br><span class="line">|——webpack.config.js</span><br></pre></td></tr></table></figure></p>
+<p>各文件如下：</p>
+<p><code>Star.vue</code>具体代码如下，主要就是将传过来的数值处理后遍历出不同的<code>class</code>类名，然后添加到<code>span</code>上。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Star.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"star"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"star-item"</span> <span class="attr">v-for</span>=<span class="string">"(itemClass, index) in itemClasses"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">:class</span>=<span class="string">"itemClass"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="comment">// 星星长度</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">const</span> LENGTH = <span class="number">5</span>;</span></span><br><span class="line"><span class="javascript"><span class="comment">// 星星状态</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">const</span> CLS_ON = <span class="string">'on'</span>;</span></span><br><span class="line"><span class="javascript"><span class="keyword">const</span> CLS_HALF = <span class="string">'half'</span>;</span></span><br><span class="line"><span class="javascript"><span class="keyword">const</span> CLS_OFF = <span class="string">'off'</span>;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">  data () &#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="undefined">  props: &#123;</span></span><br><span class="line"><span class="undefined">    score: &#123;</span></span><br><span class="line"><span class="javascript">      type: <span class="built_in">Number</span></span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="undefined">  computed: &#123;</span></span><br><span class="line"><span class="undefined">    itemClasses () &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> result = [];</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 如果小数大于或等于0.5则变为0.5，否则为0</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> score = <span class="built_in">Math</span>.floor(<span class="keyword">this</span>.score * <span class="number">2</span>) / <span class="number">2</span>;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 全星</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> integer = <span class="built_in">Math</span>.floor(score);</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 半星</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> hasHalf = score % <span class="number">1</span> !== <span class="number">0</span>;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 遍历全星</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; integer; i++) &#123;</span></span><br><span class="line"><span class="undefined">        result.push(CLS_ON);</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 处理半星</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">if</span> (hasHalf) &#123;</span></span><br><span class="line"><span class="undefined">        result.push(CLS_HALF);</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 补齐，如果星数小于5，则一直循环判断填入数据，直到满足条件</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">while</span> (result.length &lt; LENGTH) &#123;</span></span><br><span class="line"><span class="undefined">        result.push(CLS_OFF);</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> result;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">"scss"</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">  .star&#123;</span></span><br><span class="line"><span class="undefined">    font-size: 0;</span></span><br><span class="line"><span class="undefined">    .star-item&#123;</span></span><br><span class="line"><span class="undefined">      display: inline-block;</span></span><br><span class="line"><span class="undefined">      width: 10px;</span></span><br><span class="line"><span class="undefined">      height: 10px;</span></span><br><span class="line"><span class="undefined">      margin-right: 3px;</span></span><br><span class="line"><span class="undefined">      background-repeat: no-repeat;</span></span><br><span class="line"><span class="undefined">      background-size: 10px 10px;</span></span><br><span class="line"><span class="undefined">      &amp;:last-child&#123;</span></span><br><span class="line"><span class="undefined">        margin-right: 0;</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    /* 三种图片类型*/</span></span><br><span class="line"><span class="undefined">    .on&#123;</span></span><br><span class="line"><span class="undefined">      background-image: url(./images/star24_on@2x.png);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    .half&#123;</span></span><br><span class="line"><span class="undefined">      background-image: url(./images/star24_half@2x.png);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    .off&#123;</span></span><br><span class="line"><span class="undefined">      background-image: url(./images/star24_off@2x.png);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> Star <span class="keyword">from</span> <span class="string">'./Star.vue'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Star;</span><br></pre></td></tr></table></figure>
+<p><code>package.json</code>的依赖配置如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"star-evaluation"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A plugin which use stars number to evaluate"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"dist/bundle.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack --mode production"</span>,</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --open --mode development"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"repository"</span>: &#123;</span><br><span class="line">    <span class="attr">"type"</span>: <span class="string">"git"</span>,</span><br><span class="line">    <span class="attr">"url"</span>: <span class="string">"git+https://github.com/Better-Alan/star-evaluation.git"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"keywords"</span>: [<span class="string">"star"</span>, <span class="string">"evaluation"</span>],</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"BetterMan"</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.26.3"</span>,</span><br><span class="line">    <span class="attr">"babel-loader"</span>: <span class="string">"^7.1.5"</span>,</span><br><span class="line">    <span class="attr">"babel-preset-env"</span>: <span class="string">"^1.7.0"</span>,</span><br><span class="line">    <span class="attr">"css-loader"</span>: <span class="string">"^1.0.0"</span>,</span><br><span class="line">    <span class="attr">"file-loader"</span>: <span class="string">"^2.0.0"</span>,</span><br><span class="line">    <span class="attr">"node-sass"</span>: <span class="string">"^4.9.4"</span>,</span><br><span class="line">    <span class="attr">"sass-loader"</span>: <span class="string">"^7.1.0"</span>,</span><br><span class="line">    <span class="attr">"style-loader"</span>: <span class="string">"^0.23.1"</span>,</span><br><span class="line">    <span class="attr">"url-loader"</span>: <span class="string">"^1.1.2"</span>,</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.5.17"</span>,</span><br><span class="line">    <span class="attr">"vue-hot-reload-api"</span>: <span class="string">"^2.2.4"</span>,</span><br><span class="line">    <span class="attr">"vue-html-loader"</span>: <span class="string">"^1.2.4"</span>,</span><br><span class="line">    <span class="attr">"vue-loader"</span>: <span class="string">"^15.4.2"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^3.0.1"</span>,</span><br><span class="line">    <span class="attr">"vue-style-loader"</span>: <span class="string">"^3.0.3"</span>,</span><br><span class="line">    <span class="attr">"vue-template-compiler"</span>: <span class="string">"^2.5.9"</span>,</span><br><span class="line">    <span class="attr">"webpack"</span>: <span class="string">"^4.23.1"</span>,</span><br><span class="line">    <span class="attr">"webpack-cli"</span>: <span class="string">"^3.1.2"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>webpack.config.js</code>配置如下，用于将<code>/src</code>中的内容打包到<code>/dist</code>（打包时会自动生成<code>/dist</code>文件夹）中的<code>bundle.js</code>，<code>bundle.js</code>其实就相当于我们的插件。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);  <span class="comment">// 路径处理模块</span></span><br><span class="line"><span class="keyword">const</span> &#123; VueLoaderPlugin &#125; = <span class="built_in">require</span>(<span class="string">'vue-loader'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        index: path.join(__dirname, <span class="string">"/src/index.js"</span>)   <span class="comment">// 入口</span></span><br><span class="line">    &#125;, </span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">// 打包后的文件存放的地方</span></span><br><span class="line">        publicPath: <span class="string">'/dist/'</span>,  <span class="comment">// 设置公共路径</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span>, <span class="comment">// 打包后输出文件的文件名</span></span><br><span class="line">        libraryTarget: <span class="string">'umd'</span>   <span class="comment">// 将你的library暴露为所有的模块定义下都可运行的方式，它将可在 CommonJS, AMD 环境下运行</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.vue$/</span>,   <span class="comment">// vue-loader</span></span><br><span class="line">                loader: <span class="string">'vue-loader'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,           <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|svg|gif)$/</span>,  <span class="comment">// 图片loader</span></span><br><span class="line">                use: [<span class="string">'url-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.js$/</span>,    </span><br><span class="line">                exclude: <span class="regexp">/node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//</span>,</span><br><span class="line">                loader: <span class="string">'babel-loader'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> VueLoaderPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>.npmignore</code>（别忘了前面的点）文件用于忽略不需要上传到npm的文件，规则和<code>.gitignore</code>一样。如果你的项目内有<code>.gitignore</code>但没有<code>.npmignore</code>，则会使用<code>.gitignore</code>的配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.*</span><br><span class="line">*.md</span><br><span class="line">node_modules/</span><br><span class="line">src/</span><br></pre></td></tr></table></figure></p>
+<p><code>README.md</code>说明（不是必须），大家应该都比我6。</p>
+<p>此时我们的目录应该如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e193b32e255f1?w=252&amp;h=333&amp;f=png&amp;s=17906" alt></p>
+<h4 id="2-2-安装依赖"><a href="#2-2-安装依赖" class="headerlink" title="2.2 安装依赖"></a>2.2 安装依赖</h4><p>以上文件都配置好后就可以运行一下命令安装依赖了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install</span><br></pre></td></tr></table></figure>
+<h4 id="2-3-打包项目"><a href="#2-3-打包项目" class="headerlink" title="2.3 打包项目"></a>2.3 打包项目</h4><p>依赖安装完成后对项目进行打包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-4-登录并发布（确保当前处于npm源）"><a href="#2-4-登录并发布（确保当前处于npm源）" class="headerlink" title="2.4 登录并发布（确保当前处于npm源）"></a>2.4 登录并发布（确保当前处于npm源）</h4><p>打包完成后运行<code>npm login</code>登录后<code>npm publish</code>发布：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e193f3230aac7?w=517&amp;h=151&amp;f=png&amp;s=34617" alt></p>
+<p>发布搞定！，那能不能用呢？我们去试试看。</p>
+<h4 id="2-5-试试我们的npm包"><a href="#2-5-试试我们的npm包" class="headerlink" title="2.5 试试我们的npm包"></a>2.5 试试我们的npm包</h4><ol>
+<li>先下载：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i star-evaluation -D</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e194d6df1e847?w=1000&amp;h=203&amp;f=png&amp;s=63288" alt></p>
+<ol start="2">
+<li>项目中引入使用：</li>
+</ol>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1952be1bcb7a?w=463&amp;h=322&amp;f=png&amp;s=21526" alt></p>
+<p>运行后显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e19566a4c73ec?w=489&amp;h=162&amp;f=png&amp;s=6808" alt></p>
+<p>搞定，这是不是比之前那个<code>toupper-case-project</code>插件高端那么一丢丢？<br>&nbsp;<br>那有的小伙伴可能会说了：“我平时看到的插件不是这么用的，很多都是直接<code>Vue.use()</code>后就可以用了，而且插件还有事件的。”<br>&nbsp;<br>那我们再改改？</p>
+<h3 id="三、-升级包"><a href="#三、-升级包" class="headerlink" title="三、 升级包"></a>三、 升级包</h3><p>其实能否使用<code>Vue.use()</code>这个方式来调用组件，取决于是否配置了<code>install</code>方法，我们给<code>Star.vue</code>组件加上看看：</p>
+<h4 id="3-1-配置install方法"><a href="#3-1-配置install方法" class="headerlink" title="3.1 配置install方法"></a>3.1 配置install方法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> Star <span class="keyword">from</span> <span class="string">'./Star.vue'</span>;</span><br><span class="line"></span><br><span class="line">Star.install = <span class="function"><span class="params">Vue</span> =&gt;</span> Vue.component(Star.name, Star);  <span class="comment">// 给Star组件配置install方法，注册该组件 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Star;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：这里有个需要注意的地方，就是<code>Star.name</code>是指向我们给<code>Star.vue</code>文件中配置的<code>name</code>属性，别忘了配置它：</p>
+</blockquote>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e195d47c7efc9?w=310&amp;h=141&amp;f=png&amp;s=6172" alt></p>
+<p>这时已经搞定了<code>Vue.use()</code>了，那我们再加上事件交互，就做个点击组件弹出具体的星级数值吧！</p>
+<h4 id="3-2-添加事件"><a href="#3-2-添加事件" class="headerlink" title="3.2 添加事件"></a>3.2 添加事件</h4><p>具体修改如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Star.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 绑定showNumber方法 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"star"</span> @<span class="attr">click</span>=<span class="string">"showNumber"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"star-item"</span> <span class="attr">v-for</span>=<span class="string">"(itemClass, index) in itemClasses"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">:class</span>=<span class="string">"itemClass"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">...</span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  name: <span class="string">'Star'</span>,   <span class="comment">// 别忘加上这个属性</span></span></span><br><span class="line"><span class="undefined">  ...</span></span><br><span class="line"><span class="undefined">  methods: &#123;</span></span><br><span class="line"><span class="undefined">    showNumber() &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">this</span>.$emit(<span class="string">'showNumber'</span>, <span class="string">'我是弹出的信息'</span>);  <span class="comment">// 将自定义方法showNumber暴露出去,且将参数传出</span></span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-打包-发布-使用"><a href="#3-3-打包-发布-使用" class="headerlink" title="3.3 打包-发布-使用"></a>3.3 打包-发布-使用</h4><p>依旧老套路，修改版本号-打包-发布，然后我们在练手项目中<code>cnpm i star-evaluation -D</code>再安装一次，因为有时<code>npm update star-evaluation</code>方法不太靠谱，更新不完全。</p>
+<p>然后我们在练手项目中使用<code>Vue.use()</code>方式和试试事件，在所要使用插件的文件中使用方式如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"hello"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 子组件所传出的自定义showNumber方法调用当前showMessage方法 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Star</span> @<span class="attr">showNumber</span>=<span class="string">"showMessage"</span> <span class="attr">:score</span>=<span class="string">"2.6"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>   <span class="comment">// 引入Vue</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">import</span> Star <span class="keyword">from</span> <span class="string">'star-evaluation'</span>;  <span class="comment">// 引入Star插件</span></span></span><br><span class="line"><span class="javascript">Vue.use(Star)  <span class="comment">// 使用Star插件</span></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="comment">// 以上的引入和注册一般是在main.js中统一完成，这个大家应该都比较熟悉</span></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">// 因为使用了Vue.use(Star)方式，所以这里不需要使用components: &#123;Star&#125;来注册插件</span></span></span><br><span class="line"><span class="undefined">  methods: &#123;</span></span><br><span class="line"><span class="javascript">    <span class="comment">// 点击组件触发此方法</span></span></span><br><span class="line"><span class="undefined">    showMessage(mes) &#123;</span></span><br><span class="line"><span class="undefined">      alert(mes);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后我们<code>npm run dev</code>重启启用项目，点击组件显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e19648c7c25ac?w=996&amp;h=289&amp;f=png&amp;s=12517" alt></p>
+<p>搞定！是不是也没那么难？</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>本来只打算简单的写下基本步骤的，没想到写（啰嗦）了这么长，有写得不合适的地方请多多指教，如果能对你有所帮助，也麻烦<a href="https://github.com/chen-yulun/star-evaluation" target="_blank" rel="noopener">github</a>给个星哈，这样我就可以放心的去搬砖了↓-↓</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/5/166e1967ded0de7d?w=690&amp;h=690&amp;f=jpeg&amp;s=94347" alt></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/25/命令行/" rel="next" title="命令行">
+                <i class="fa fa-chevron-left"></i> 命令行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/12/webpack4.x最详细入门讲解/" rel="prev" title="webpack4.x最详细入门讲解">
+                webpack4.x最详细入门讲解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">陈煜仑</p>
+              <p class="site-description motion-element" itemprop="description">种一棵树最好的时间是十年前，还有现在</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、一个最简单的npm包"><span class="nav-number">2.</span> <span class="nav-text">一、一个最简单的npm包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-新建文件夹"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 新建文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-初始化项目"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 初始化项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-新建项目文件"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 新建项目文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-发布"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 发布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-用用我们发布的包"><span class="nav-number">2.5.</span> <span class="nav-text">1.5 用用我们发布的包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-更新包"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 更新包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、基于webpack和vue的npm包"><span class="nav-number">3.</span> <span class="nav-text">二、基于webpack和vue的npm包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-构建项目（星级评价组件）"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 构建项目（星级评价组件）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-安装依赖"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 安装依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-打包项目"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 打包项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-登录并发布（确保当前处于npm源）"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 登录并发布（确保当前处于npm源）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-试试我们的npm包"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 试试我们的npm包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、-升级包"><span class="nav-number">4.</span> <span class="nav-text">三、 升级包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-配置install方法"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 配置install方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-添加事件"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 添加事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-打包-发布-使用"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 打包-发布-使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">5.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈煜仑</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="theme-info"><a href="https://github.com/chen-yulun" class="theme-link" rel="noopener" target="_blank">GitHub</a> - <a href="https://juejin.im/user/5ba9ea3c5188255c8b6ef168/posts" class="theme-link" rel="noopener" target="_blank">掘金博客</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

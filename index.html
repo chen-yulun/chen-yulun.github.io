@@ -96,16 +96,16 @@
 
 
 
-  <meta name="description" content="from now on">
+  <meta name="description" content="种一棵树最好的时间是十年前，还有现在">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chen&#39;s blog">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Chen&#39;s blog">
-<meta property="og:description" content="from now on">
+<meta property="og:description" content="种一棵树最好的时间是十年前，还有现在">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chen&#39;s blog">
-<meta name="twitter:description" content="from now on">
+<meta name="twitter:description" content="种一棵树最好的时间是十年前，还有现在">
 
 
 
@@ -288,11 +288,11 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/18/命令行/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/17/ES6读书笔记(二)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chenyulun">
-      <meta itemprop="description" content="from now on">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -308,7 +308,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/02/18/命令行/" class="post-title-link" itemprop="url">闭包</a>
+                <a href="/2019/02/17/ES6读书笔记(二)/" class="post-title-link" itemprop="url">ES6读书笔记(二)</a>
               
             
           </h1>
@@ -333,7 +333,7 @@
                 
               
 
-              <time title="创建时间：2019-02-18 11:45:20" itemprop="dateCreated datePublished" datetime="2019-02-18T11:45:20+08:00">2019-02-18</time>
+              <time title="创建时间：2019-02-17 11:56:16" itemprop="dateCreated datePublished" datetime="2019-02-17T11:56:16+08:00">2019-02-17</time>
             
 
             
@@ -350,7 +350,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-19 10:17:24" itemprop="dateModified" datetime="2019-02-19T10:17:24+08:00">2019-02-19</time>
+                <time title="修改时间：2019-02-19 12:56:03" itemprop="dateModified" datetime="2019-02-19T12:56:03+08:00">2019-02-19</time>
               
             
           </span>
@@ -385,31 +385,1305 @@
 
       
         
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前段时间整理了ES6的读书笔记：<a href="https://juejin.im/post/5c371abc5188251e10158918" target="_blank" rel="noopener">《ES6读书笔记(一)》</a>，现在为第二篇，本篇内容包括：</p>
+          <!--noindex-->
           
-            <h5 id="一、使用Powershell"><a href="#一、使用Powershell" class="headerlink" title="一、使用Powershell"></a>一、使用Powershell</h5><p>基于<code>Windows</code>和<code>Mac</code>系统命令行的使用差异，可统一使用<code>Powershell</code>，<code>win10</code>系统自带<code>Powershell</code>，其它系统也可安装。</p>
-<h5 id="二、打开命令窗口"><a href="#二、打开命令窗口" class="headerlink" title="二、打开命令窗口"></a>二、打开命令窗口</h5><p>①默认方式打开：打开”运行”对话框<code>(Win+R)</code>，输入<code>cmd</code>，打开系统默认控制台命令窗口，或者输入<code>Powershell</code>打开<code>Powershell</code>窗口。</p>
-<p>②在目标位置打开：在需要打开的文件夹空白处按住<code>Shift</code>，然后右键弹出快捷菜单，可以看到“在此处打开命令行窗口”或者是“在此处打开Powershell窗口”。</p>
-<h5 id="三、进入目标文件夹"><a href="#三、进入目标文件夹" class="headerlink" title="三、进入目标文件夹"></a>三、进入目标文件夹</h5><p>①更改盘符：默认打开<code>Powershell</code>时会在C盘默认位置，要改变盘符，可使用cd命令，即<code>change directory</code>，如进入E盘，使用<code>cd E:</code>或<code>cd e:</code>，不计大小写，中间空格隔开。</p>
-<p>②更改文件夹：cd后跟上要进入的文件夹路径，如<code>cd notes/markdown</code>，会进入到当前位置下的<code>notes</code>文件夹下的<code>markdown</code>文件夹；返回上级目录可使用<code>cd ..</code>，即返回到<code>notes</code>文件夹下。</p>
-<p>③也可在打开<code>Powershell</code>窗口后直接把目标文件夹拖入窗口中，这样可直接进入目标文件夹，这个效果和在目标位置打开<code>Powershell</code>窗口一致。</p>
-<h5 id="四、创建-amp-删除"><a href="#四、创建-amp-删除" class="headerlink" title="四、创建&amp;删除"></a>四、创建&amp;删除</h5><p>①创建文件夹：<code>mkdir</code>，即<code>make directory</code>，例如使用<code>mkdir learn</code>,可在当前位置创建一个名为<code>learn</code>的文件夹。</p>
-<p>②删除文件夹：<code>rmdir</code>，即<code>remove directory</code>，例如可使用<code>rmdir learn</code>把刚才创建的<code>learn</code>文件夹删除。</p>
-<p>③创建文件：<code>ni</code>，即<code>new item</code>，例如使用<code>ni command.md</code>，可在当前位置创建一个名为<code>command</code>的<code>markdown</code>文件。</p>
-<p>④删除文件：<code>rm</code>，即<code>remove</code>，例如可使用<code>rm command.md</code>可把刚才创建的<code>command.md</code>文件删除。</p>
-<h5 id="五、一些常用技巧"><a href="#五、一些常用技巧" class="headerlink" title="五、一些常用技巧"></a>五、一些常用技巧</h5><p>①上下方向键可查看使用过的命令，可直接回车使用该命令。</p>
-<p>②<code>tab</code>键可自动补齐路径、文件夹或文件名称。</p>
-<p>③<code>pwd</code>命令<code>(print working directory)</code>可打印当前所在工作目录。</p>
-<p>④<code>ls</code>命令<code>(list)</code>可列出当前路径下的内容。</p>
-<p>⑤<code>cls</code>命令<code>(clear screen)</code>可对命令窗口进行清屏。</p>
-<h5 id="六、关于项目工程化"><a href="#六、关于项目工程化" class="headerlink" title="六、关于项目工程化"></a>六、关于项目工程化</h5><p>关于项目工程化的命令行，用得最多的肯定就是<code>npm</code>了，国内可是使用淘宝镜像<code>cnpm</code>，配置方法可<a href="http://npm.taobao.org/" target="_blank" rel="noopener">去这里</a>查看。</p>
-<p>1.<code>npm init</code>可生成<code>package.json</code>文件，用于管理依赖配置。<br>2.<code>cnpm install 依赖包名</code>可安装对应的依赖，可根据是在开发环境(开发时)还是生产环境(上线后)来加上<code>--save-dev</code>或<code>--save</code>。</p>
-<p>①例如安装<code>sass</code>模块：该依赖只需要在开发环境中使用，使用<code>cnpm install sass --save-dev</code>，该配置会在<code>package.json</code>文件的<code>devDependencies</code>节点写入依赖。</p>
-<p>②反之如<code>vuex</code>模块在生产环境中也是需要的，所以使用<code>cnpm install vuex --save</code>，该配置会在<code>package.json</code>文件的<code>dependencies</code>节点写入依赖。</p>
-<p>③还有需要全局安装的如：<code>webpack</code>的安装，<code>cnpm install webpack -g</code>，需要加上<code>-g</code>尾缀，因为它相当于是给你装上了一个全局的命令。</p>
-<p>在实际开发中我们可采用简写方式：<code>install</code>可简写为<code>i</code>，<code>--save-dev</code>可简写为<code>-S</code>，<code>--save</code>可简写为<code>-D</code>。</p>
-<h5 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h5><p>当然了，上述命令行也只是冰山一角，但实际开发中常用的也就那些，希望能给您带来些许帮助，如有不对或遗漏的地方，还望不吝赐教。</p>
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/02/17/ES6读书笔记(二)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/ES6读书笔记(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/10/ES6读书笔记(一)/" class="post-title-link" itemprop="url">ES6读书笔记(一)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-10 11:55:53" itemprop="dateCreated datePublished" datetime="2019-01-10T11:55:53+08:00">2019-01-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 12:55:02" itemprop="dateModified" datetime="2019-02-19T12:55:02+08:00">2019-02-19</time>
+              
+            
+          </span>
 
           
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前段时间整理了ES5的读书笔记：<a href="https://juejin.im/post/5c1cc30d518825673b02c907" target="_blank" rel="noopener">《你可能遗漏的JS知识点(一)》</a>、<a href="https://juejin.im/post/5c1f6ac951882518fc5fd87c" target="_blank" rel="noopener">《你可能遗漏的JS知识点(二)》</a>，现在轮到ES6了，总共分为四篇，以便于知识点的梳理和查看，本篇内容包括：</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/10/ES6读书笔记(一)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/07/闭包该如何理解？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/07/闭包该如何理解？/" class="post-title-link" itemprop="url">闭包该如何理解？</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-07 11:55:46" itemprop="dateCreated datePublished" datetime="2019-01-07T11:55:46+08:00">2019-01-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 12:53:44" itemprop="dateModified" datetime="2019-02-19T12:53:44+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://user-gold-cdn.xitu.io/2018/12/26/167e9f57cfed1871?w=336&amp;h=348&amp;f=png&amp;s=59747" alt></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>说到闭包，实在是居家旅行破境渡劫摄魄迷魂必备良药！不吃不知道，一吃哇哇叫，下面我们也去搞两盒试试。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/07/闭包该如何理解？/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/你可能遗漏的JS知识点(二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/23/你可能遗漏的JS知识点(二)/" class="post-title-link" itemprop="url">你可能遗漏的JS知识点(二)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-23 11:55:38" itemprop="dateCreated datePublished" datetime="2018-12-23T11:55:38+08:00">2018-12-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 12:27:32" itemprop="dateModified" datetime="2019-02-19T12:27:32+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这是对平时的一些读书笔记和理解进行整理的第二部分，第一部分请前往：<a href="https://juejin.im/post/5c1cc30d518825673b02c907" target="_blank" rel="noopener">你可能遗漏的JS知识点(一)</a>。本文包含一些易混淆、遗漏的知识点，也会配上一些例子，也许不是很完整，也许还会有点杂，但也许会有你需要的，<code>后续会持续更新，喜欢就关注一下喽！</code><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/12/23/你可能遗漏的JS知识点(二)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/你可能遗漏的JS知识点(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/21/你可能遗漏的JS知识点(一)/" class="post-title-link" itemprop="url">你可能遗漏的JS知识点(一)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-21 11:55:32" itemprop="dateCreated datePublished" datetime="2018-12-21T11:55:32+08:00">2018-12-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:58:49" itemprop="dateModified" datetime="2019-02-19T11:58:49+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文把平时的一些读书笔记和理解进行了整理归纳，包含一些易混淆、遗漏的知识点，也会配上一些例子，可能不是很完整，还会有点杂，但也许会有你需要的(目前先整理了一部分，笔记有点多，后续会持续更新)。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/12/21/你可能遗漏的JS知识点(一)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/20/彻底弄懂JS原型与继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/20/彻底弄懂JS原型与继承/" class="post-title-link" itemprop="url">彻底弄懂JS原型与继承</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-20 11:44:39" itemprop="dateCreated datePublished" datetime="2018-11-20T11:44:39+08:00">2018-11-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:59:22" itemprop="dateModified" datetime="2019-02-19T11:59:22+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文由浅到深，循序渐进的将原型与继承的抽象概念形象化，且每个知识点都搭配相应的例子，尽可能的将其通俗化，而且本文最大的优点就是：长（为了更详细嘛）。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/11/20/彻底弄懂JS原型与继承/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/12/webpack4.x最详细入门讲解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/12/webpack4.x最详细入门讲解/" class="post-title-link" itemprop="url">webpack4.x最详细入门讲解</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-12 11:43:15" itemprop="dateCreated datePublished" datetime="2018-11-12T11:43:15+08:00">2018-11-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:53:45" itemprop="dateModified" datetime="2019-02-19T11:53:45+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文主要从webpack4.x入手，会对平时常用的Webpack配置一一讲解，各个功能点都有对应的详细例子，所以本文也比较长，但如果你能动手跟着本文中的例子完整写一次，相信你会觉得Webpack也不过如此。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/11/12/webpack4.x最详细入门讲解/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/05/不会发布node包？进来看看/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/05/不会发布node包？进来看看/" class="post-title-link" itemprop="url">不会发布node包？进来看看</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 11:43:15" itemprop="dateCreated datePublished" datetime="2018-11-05T11:43:15+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:47:34" itemprop="dateModified" datetime="2019-02-19T11:47:34+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>npm(Node Package Manager)，一个Node的包管理器，平时我们常用的公共模块（插件）或者叫做包大多都放在上面。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/11/05/不会发布node包？进来看看/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/25/命令行/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/25/命令行/" class="post-title-link" itemprop="url">命令行</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-25 11:45:20" itemprop="dateCreated datePublished" datetime="2018-09-25T11:45:20+08:00">2018-09-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:27:29" itemprop="dateModified" datetime="2019-02-19T11:27:29+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h5 id="一、使用Powershell"><a href="#一、使用Powershell" class="headerlink" title="一、使用Powershell"></a>一、使用Powershell</h5><p>基于<code>Windows</code>和<code>Mac</code>系统命令行的使用差异，可统一使用<code>Powershell</code>，<code>win10</code>系统自带<code>Powershell</code>，其它系统也可安装。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/09/25/命令行/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -481,8 +1755,8 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">Chenyulun</p>
-              <p class="site-description motion-element" itemprop="description">from now on</p>
+              <p class="site-author-name" itemprop="name">陈煜仑</p>
+              <p class="site-description motion-element" itemprop="description">种一棵树最好的时间是十年前，还有现在</p>
           </div>
 
           
@@ -492,7 +1766,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -539,7 +1813,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Chenyulun</span>
+  <span class="author" itemprop="copyrightHolder">陈煜仑</span>
 
   
 

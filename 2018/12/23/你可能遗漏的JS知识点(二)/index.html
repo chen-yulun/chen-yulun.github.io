@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言这是对平时的一些读书笔记和理解进行整理的第二部分，第一部分请前往：你可能遗漏的JS知识点(一)。本文包含一些易混淆、遗漏的知识点，也会配上一些例子，也许不是很完整，也许还会有点杂，但也许会有你需要的，后续会持续更新，喜欢就关注一下喽！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你可能遗漏的JS知识点(二)">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/你可能遗漏的JS知识点(二)/index.html">
+<meta property="og:site_name" content="Chen&#39;s blog">
+<meta property="og:description" content="前言这是对平时的一些读书笔记和理解进行整理的第二部分，第一部分请前往：你可能遗漏的JS知识点(一)。本文包含一些易混淆、遗漏的知识点，也会配上一些例子，也许不是很完整，也许还会有点杂，但也许会有你需要的，后续会持续更新，喜欢就关注一下喽！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/21/167d05bdfff953ad?w=580&h=580&f=jpeg&s=20251">
+<meta property="og:updated_time" content="2019-02-19T04:27:32.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="你可能遗漏的JS知识点(二)">
+<meta name="twitter:description" content="前言这是对平时的一些读书笔记和理解进行整理的第二部分，第一部分请前往：你可能遗漏的JS知识点(一)。本文包含一些易混淆、遗漏的知识点，也会配上一些例子，也许不是很完整，也许还会有点杂，但也许会有你需要的，后续会持续更新，喜欢就关注一下喽！">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/12/21/167d05bdfff953ad?w=580&h=580&f=jpeg&s=20251">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/你可能遗漏的JS知识点(二)/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>你可能遗漏的JS知识点(二) | Chen's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>blog</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>archive</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/你可能遗漏的JS知识点(二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">你可能遗漏的JS知识点(二)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-23 11:55:38" itemprop="dateCreated datePublished" datetime="2018-12-23T11:55:38+08:00">2018-12-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 12:27:32" itemprop="dateModified" datetime="2019-02-19T12:27:32+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这是对平时的一些读书笔记和理解进行整理的第二部分，第一部分请前往：<a href="https://juejin.im/post/5c1cc30d518825673b02c907" target="_blank" rel="noopener">你可能遗漏的JS知识点(一)</a>。本文包含一些易混淆、遗漏的知识点，也会配上一些例子，也许不是很完整，也许还会有点杂，但也许会有你需要的，<code>后续会持续更新，喜欢就关注一下喽！</code><br><a id="more"></a></p>
+<h3 id="三、运算符"><a href="#三、运算符" class="headerlink" title="三、运算符"></a>三、运算符</h3><h4 id="3-1运算符"><a href="#3-1运算符" class="headerlink" title="3.1运算符"></a>3.1运算符</h4><p>1.易忽略的例子：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;;</span><br><span class="line"><span class="string">"toString"</span> <span class="keyword">in</span> obj;   <span class="comment">//true  obj继承了toString()方法且in能遍历原型上的不可枚举属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr =[ <span class="number">3</span>, <span class="number">6</span> ,<span class="number">8</span>];</span><br><span class="line"><span class="string">"0"</span> <span class="keyword">in</span> arr;          <span class="comment">//true  数组包含有0索引属性</span></span><br></pre></td></tr></table></figure></p>
+<p>2.运算子的不同，导致了不同的语法行为，这种现象称为“重载”（overload）。加号会发生重载，因为加号可当成加法运算，也可作为字符串连接符，而减法，除法和乘法不会发送重载，因为都是作为数学运算使用。</p>
+<p>3.余数运算符（%）的运算结果的正负号由第一个运算子的正负号决定：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">-1</span> % <span class="number">2</span>     <span class="comment">// -1</span></span><br><span class="line"><span class="number">1</span> % <span class="number">-2</span>     <span class="comment">// 1</span></span><br><span class="line"><span class="number">10</span> % <span class="number">0</span>     <span class="comment">// NaN</span></span><br><span class="line"><span class="number">10</span> % <span class="string">'0'</span>   <span class="comment">// NaN</span></span><br><span class="line"><span class="number">10</span> % <span class="number">1</span>     <span class="comment">// 0</span></span><br><span class="line"><span class="number">2</span> % <span class="number">3</span>      <span class="comment">// 2</span></span><br></pre></td></tr></table></figure></p>
+<p>4.</p>
+<ul>
+<li><p><code>with</code>：用于设置代码在特定对象中的作用域。</p>
+</li>
+<li><p><code>eval</code>：可计算某个字符串，并执行其中的的 JavaScript 代码。</p>
+</li>
+<li><p><code>void</code>：作用是执行一个表达式，然后不返回任何值，或者说返回undefined。</p>
+</li>
+<li><p>逗号运算符：用于对两个表达式求值，并返回后一个表达式的值。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'a'</span>, <span class="string">'b'</span>   <span class="comment">// "b"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> y = (x++, <span class="number">10</span>);</span><br><span class="line">x;        <span class="comment">// 1</span></span><br><span class="line">y;        <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+<p>5.优先级：！&gt; &amp;&amp; &gt; || &gt; 三目运算符，等号优先级较低，逗号优先级更低。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例一：</span></span><br><span class="line"><span class="literal">true</span> || <span class="literal">false</span> &amp;&amp; <span class="literal">false</span>  </span><br><span class="line"></span><br><span class="line"><span class="comment">//相当于: </span></span><br><span class="line"> <span class="literal">true</span> || (<span class="literal">false</span> &amp;&amp; <span class="literal">false</span>)    <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//例二：</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">42</span>, b;</span><br><span class="line">b = (a++, a);    <span class="comment">// 因为括号包了起来，优先级比=高，所以优先运算括号内的结果，先a++,然后再a，得到结果后再赋值给b</span></span><br><span class="line">a;    <span class="comment">// 43</span></span><br><span class="line">b;    <span class="comment">// 43</span></span><br></pre></td></tr></table></figure>
+<p>6.三目运算符可适当代替if else。</p>
+<h3 id="四、内置对象"><a href="#四、内置对象" class="headerlink" title="四、内置对象"></a>四、内置对象</h3><h4 id="4-1-Date"><a href="#4-1-Date" class="headerlink" title="4.1 Date"></a>4.1 Date</h4><p>1.<code>Date</code>对象是JavaScript原生的时间库。它以1970年1月1日00:00:00作为时间的零点，可以表示的时间范围是前后各1亿天（单位为毫秒），是构造函数。</p>
+<p>2.直接调用Date总是返回当前时间，为字符串，且传入参数无效：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Date</span>();   <span class="comment">// "Wed Feb 19 2018 16:57:42 GMT+0800 (中国标准时间)"</span></span><br><span class="line"><span class="built_in">Date</span>(<span class="number">2000</span>, <span class="number">1</span>, <span class="number">1</span>);   <span class="comment">// "Wed Feb 19 2018 16:57:42 GMT+0800 (中国标准时间)"</span></span><br></pre></td></tr></table></figure></p>
+<p>3.<code>new Date()</code>返回当前日期，为对象，也可接受多种格式的参数，返回一个该参数对应的时间实例：</p>
+<ul>
+<li><p>①不传入参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>();   <span class="comment">// Wed Dec 19 2018 17:03:59 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②参数为时间零点开始计算的毫秒数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">1378218728000</span>);   <span class="comment">// Tue Sep 03 2013 22:32:08 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>③参数也可为负整数，代表1970年元旦之前的时间：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">-1378218728000</span>);   <span class="comment">// Fri Apr 30 1926 17:27:52 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>④参数为多个整数，代表年、月、日、小时、分钟、秒、毫秒:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2018</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);  <span class="comment">// Mon Jan 01 2018 00:00:00 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>⑤参数为日期字符串，可以以空格隔开或者逗号隔开，可以2018,1,2顺序或者1,2,2018顺序，如果输入数值不规范，会自动溢出，如2月没有30号，会自动溢出为3月1号:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'January 6, 2018'</span>);   <span class="comment">// Sat Jan 06 2018 00:00:00 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>⑥只要是能被Date.parse()方法解析的字符串，都可以当作参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2018-2-15'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2018/2/15'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'02/15/2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2018-FEB-15'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'FEB, 15, 2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'FEB 15, 2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Feberuary, 15, 2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Feberuary 15, 2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'15 Feb 2018'</span>)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'15, Feberuary, 2018'</span>)</span><br><span class="line"><span class="comment">// Thu Feb 15 2018 00:00:00 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4.<code>Date.now()</code>:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Date.now方法返回当前时间距离时间零点（1970年1月1日 00:00:00 UTC）的毫秒数</span></span><br><span class="line"><span class="built_in">Date</span>.now()  <span class="comment">// 1545211158395</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Date</span>.now() === <span class="keyword">new</span> <span class="built_in">Date</span>().getTime()   <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<p>5.<code>Date.parse()</code>：</p>
+<p><code>Date.parse</code>方法用来解析日期字符串，返回该时间距离时间零点（1970年1月1日 00:00:00）的毫秒数：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'Aug 9, 2018'</span>)</span><br><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'January 26, 2018 13:51:50'</span>)</span><br><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'Mon, 25 Dec 2018 13:30:00 GMT'</span>)</span><br><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'Mon, 25 Dec 2018 13:30:00 +0430'</span>)</span><br><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'2018-10-10'</span>)</span><br><span class="line"><span class="built_in">Date</span>.parse(<span class="string">'2018-10-10T14:48:00'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>6.数据接口一般使用时间戳，因为时间戳在哪个时区都是一样的。</p>
+<p>7.可以将日期的内部表达形式当成一个整数类型的<code>timestamp</code>, 而其他的表达形式只不过是这种内部形式的‘糖衣’，所以<code>new Date()</code>实例的<code>valueOf()</code>返回的是一个<code>timestamp</code>就很容易理解了：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>().valueOf();    <span class="comment">// 1542004695697</span></span><br><span class="line"><span class="comment">// 所以new Date()转换为整型只需要一个加号+，因为会自动调用valueOf()方法。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//以上等同于以下方式：</span></span><br><span class="line"><span class="keyword">var</span> d = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">d.valueOf();     <span class="comment">// 1542004695697 </span></span><br><span class="line">d.getTime();    <span class="comment">// 1542004695697 </span></span><br><span class="line"><span class="built_in">Date</span>.parse(d);  <span class="comment">// 1542004695697 </span></span><br><span class="line"><span class="built_in">Date</span>.now();     <span class="comment">// 1542004695697</span></span><br></pre></td></tr></table></figure></p>
+<p>8.<code>get</code>方法：</p>
+<ul>
+<li><code>getTime()</code>：返回实例距离1970年1月1日00:00:00的毫秒数，等同于valueOf方法。</li>
+<li><code>getYear()</code>：返回距离1900的年数。</li>
+<li><code>getFullYear()</code>：返回四位的年份。</li>
+<li><code>getMonth()</code>：返回月份（0表示1月，11表示12月）。</li>
+<li><code>getDate()</code>：返回实例对象对应每个月的几号（从1开始）。</li>
+<li><code>getDay()</code>：返回星期几，星期日为0，星期一为1，以此类推。</li>
+<li><code>getHours()</code>：返回小时（0-23）。</li>
+<li><code>getMinutes()</code>：返回分钟（0-59）。</li>
+<li><code>getSeconds()</code>：返回秒（0-59）。</li>
+<li><code>getMilliseconds()</code>：返回毫秒（0-999）。</li>
+<li><code>getTimezoneOffset()</code>：返回当前时间与 UTC 的时区差异，以分钟表示，返回结果考虑到了夏令时因素。</li>
+</ul>
+<p>9.<code>set</code>方法:</p>
+<ul>
+<li><code>setTime(milliseconds)</code>：设置毫秒时间戳。</li>
+<li><code>setYear(year)</code>: 设置距离1900年的年数。</li>
+<li><code>setFullYear(year [, month, date])</code>：设置四位年份。</li>
+<li><code>setMonth(month [, date])</code>：设置月份（0-11）。</li>
+<li><code>setDate(date)</code>：设置实例对象对应的每个月的几号(1-31），返回改变后毫秒时间戳。</li>
+<li><code>setHours(hour [, min, sec, ms])</code>：设置小时（0-23）。</li>
+<li><code>setMinutes(min [, sec, ms])</code>：设置分钟（0-59）。</li>
+<li><code>setSeconds(sec [, ms])</code>：设置秒（0-59）。</li>
+<li><code>setMilliseconds()</code>：设置毫秒（0-999）。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> d = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将年份设为去年：</span></span><br><span class="line">d.setFullYear(d.getFullYear() - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将日期向后推1000天：</span></span><br><span class="line">d.setDate(d.getDate() + <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将时间设为6小时后：</span></span><br><span class="line">d.setHours(d.getHours() + <span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+<p>10.UTC时间比北京时间晚8小时。</p>
+<h4 id="4-2-Math"><a href="#4-2-Math" class="headerlink" title="4.2 Math"></a>4.2 Math</h4><p>1.<code>Math</code>是 JavaScript 的原生对象，提供各种数学功能。该对象不是构造函数，不能生成实例，所有的属性和方法都必须在Math对象上调用。</p>
+<p>2.<code>Math.random()</code>得到的是包括0但不包括1的随机数。</p>
+<ul>
+<li><p>①取随机数： [2, 10)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.random() * <span class="number">8</span> + <span class="number">2</span>;    <span class="comment">// 因为至少是大于或等于2，所以要加上2，同时又不能大于10，所以只能乘上8来保证小于8，然后加上2得到小于10的数</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②取随机数：(2, 10]</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="built_in">Math</span>.random() * <span class="number">8</span> + <span class="number">2</span>, b;</span><br><span class="line">    b = <span class="number">12</span> - a; <span class="comment">// a肯定是一个大于等于2但小于10的数，所以b为大于2但小于等于10的数</span></span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br><span class="line">f();  <span class="comment">// 8.199542416221309</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>③取随机数：(2, 10)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNumber</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="built_in">Math</span>.random(), b = <span class="number">2</span>, c;</span><br><span class="line">    <span class="keyword">while</span>(a === <span class="number">0</span>)&#123;</span><br><span class="line">        a = <span class="built_in">Math</span>.random();</span><br><span class="line">    &#125;</span><br><span class="line">    c = a * <span class="number">8</span> + b;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125; </span><br><span class="line">getNumber();   <span class="comment">// 6.153494475244344</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>④取随机整数： [2, 10]的整数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">9</span> + <span class="number">2</span>);   <span class="comment">// 乘以个数再加上第一个数（第一个可能的值）</span></span><br><span class="line"><span class="comment">// 加2保证了至少等于2，而随机数乘9能得到不到于9的数，然后两者相加取整后能保证最大就是10</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>3.<code>Math.max()</code></p>
+<ul>
+<li><p>①取最大数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②确保一个合法的月份值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.max(<span class="built_in">Math</span>.min(<span class="number">1</span>, <span class="string">'input输入值如果不在1-2的范围内)'</span>, <span class="number">12</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="4-3-RegExp"><a href="#4-3-RegExp" class="headerlink" title="4.3 RegExp"></a>4.3 RegExp</h4><p>1.全称：regular expression。</p>
+<p>2.修饰符：g, i, m, u, y</p>
+<p>3.元字符：</p>
+<ul>
+<li>①点字符<code>.</code>匹配除回车（\r）、换行(\n) 、行分隔符（\u2028）和段分隔符（\u2029）以外的所有字符。</li>
+<li>②<code>^</code>表示字符串的开始位置。  <code>/^test/.test(&#39;test123&#39;);   // true</code></li>
+<li>③<code>$</code>表示字符串的结束位置。  <code>/test$/.test(&#39;new test&#39;);  // true</code></li>
+<li>④竖线符号<code>|</code>在正则表达式中表示”或关系”(OR)。 <code>/11|22/.test(&#39;911&#39;)   // true</code></li>
+</ul>
+<p>4.量词符：用来设定某个模式出现的次数。</p>
+<ul>
+<li><code>?</code>问号表示某个模式出现0次或1次，等同于{0, 1}</li>
+<li><code>*</code>星号表示某个模式出现0次或多次，等同于{0,}</li>
+<li><code>+</code>加号表示某个模式出现1次或多次，等同于{1,}</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// t 出现0次或1次</span></span><br><span class="line">/t?est/.test(<span class="string">'test'</span>)  <span class="comment">// true</span></span><br><span class="line">/t?est/.test(<span class="string">'est'</span>)   <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// t 出现0次或多次</span></span><br><span class="line">/t*est/.test(<span class="string">'test'</span>)  <span class="comment">// true</span></span><br><span class="line">/t*est/.test(<span class="string">'ttest'</span>) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// t 出现1次或多次</span></span><br><span class="line">/t+est/.test(<span class="string">'test'</span>)  <span class="comment">// true</span></span><br><span class="line">/t+est/.test(<span class="string">'ttest'</span>) <span class="comment">// true</span></span><br><span class="line">/t+est/.test(<span class="string">'est'</span>)   <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>5.转义符：<br>需要反斜杠转义的一共有12个字符：<code>^、.、[、$、(、)、|、*、+、?、{、\\</code></p>
+<p>6.特殊字符:</p>
+<ul>
+<li><code>[\b]</code> 匹配退格键(U+0008)，不要与\b混淆</li>
+<li><code>\n</code> 匹配换行键</li>
+<li><code>\r</code> 匹配回车键</li>
+<li><code>\t</code> 匹配制表符 tab（U+0009）</li>
+<li><code>\v</code> 匹配垂直制表符（U+000B）</li>
+<li><code>\f</code> 匹配换页符（U+000C）</li>
+<li><code>\0</code> 匹配null字符（U+0000）</li>
+</ul>
+<p>7.字符类: 要放到方括号内才有效，字符类（class）表示有一系列字符可供选择，只要匹配其中一个就可以了,比如[xyz] 表示x、y、z之中任选一个匹配。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/[abc]/.test(<span class="string">'hello world'</span>)   <span class="comment">// false</span></span><br><span class="line">/[abc]/.test(<span class="string">'apple'</span>)         <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<p>①脱字符<code>^</code>：一定是要放到方括号内，要和元字符^区分开，如果方括号内的第一个字符是[^]，则表示除了字符类之中的字符，其他字符都可以匹配：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/[^abc]/.test(<span class="string">'hello world'</span>)   <span class="comment">// true</span></span><br><span class="line">/[^abc]/.test(<span class="string">'bbc'</span>)           <span class="comment">// false</span></span><br></pre></td></tr></table></figure></p>
+<p>②连字符<code>-</code>：用来提供简写形式，表示字符的连续范围。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/a-z/.test(<span class="string">'b'</span>)     <span class="comment">// false</span></span><br><span class="line">/[a-z]/.test(<span class="string">'b'</span>)   <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<p>8.重复类：使用大括号{}表示，{n}表示恰好重复n次，{n,}表示至少重复n次，{n,m}表示重复不少于n次，不多于m次。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/lo&#123;<span class="number">2</span>&#125;k/.test(<span class="string">'look'</span>)       <span class="comment">// true</span></span><br><span class="line">/lo&#123;<span class="number">2</span>,<span class="number">5</span>&#125;k/.test(<span class="string">'looook'</span>)   <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<p>9.预定义模式：指的是某些常见模式的简写方式。</p>
+<ul>
+<li><code>\d</code> 匹配0-9之间的任一数字，相当于[0-9]</li>
+<li><code>\D</code> 匹配所有0-9以外的字符，相当于[^0-9]</li>
+<li><code>\w</code> 匹配任意的字母、数字和下划线，相当于[A-Za-z0-9_]</li>
+<li><code>\W</code> 除所有字母、数字和下划线以外的字符，相当于[^A-Za-z0-9_]</li>
+<li><code>\s</code> 匹配空格（包括换行符、制表符、空格符等），相等于[ \t\r\n\v\f]</li>
+<li><code>\S</code> 匹配非空格的字符，相当于[^ \t\r\n\v\f]</li>
+<li><code>\b</code> 匹配词的边界</li>
+<li><code>\B</code> 匹配非词边界，即在词的内部</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 例：</span></span><br><span class="line">/\s\w*<span class="regexp">/.exec('hello world');    /</span><span class="regexp">/ [" world"]</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span>\bworld/.test(<span class="string">'hello world'</span>);  <span class="comment">// true</span></span><br><span class="line">/\bworld/.test(<span class="string">'hello-world'</span>);  <span class="comment">// true</span></span><br><span class="line">/\bworld/.test(<span class="string">'helloworld'</span>);   <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">/\Bworld/.test(<span class="string">'hello-world'</span>);  <span class="comment">// false</span></span><br><span class="line">/\Bworld/.test(<span class="string">'helloworld'</span>);   <span class="comment">// true</span></span><br><span class="line"><span class="keyword">var</span> html = <span class="string">"&lt;b&gt;Hello&lt;/b&gt;\n&lt;i&gt;world!&lt;/i&gt;"</span>;</span><br><span class="line"></span><br><span class="line">/[\S\s]*<span class="regexp">/.exec(html)[0];      /</span><span class="regexp">/ "&lt;b&gt;Hello&lt;/</span>b&gt;\n&lt;i&gt;world!<span class="xml"><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><span class="string">"  [\S\s]指代一切字符</span></span><br></pre></td></tr></table></figure>
+<p>10.<br>①贪婪模式：默认情况下都是最大可能匹配，即匹配直到下一个字符不满足匹配规则为止。这被称为贪婪模式。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">'aaa'</span>;</span><br><span class="line">s.match(<span class="regexp">/a+/</span>) ;  <span class="comment">// ["aaa"]</span></span><br></pre></td></tr></table></figure></p>
+<p>②非贪婪模式：</p>
+<ul>
+<li><code>*?</code>：表示某个模式出现0次或多次，匹配时采用非贪婪模式。</li>
+<li><code>+?</code>：表示某个模式出现1次或多次，匹配时采用非贪婪模式。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">'aaa'</span>;</span><br><span class="line">s.match(<span class="regexp">/a+?/</span>) ;  <span class="comment">// ["a"];</span></span><br></pre></td></tr></table></figure>
+<p>11.组匹配：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/fred+<span class="regexp">/.test('fredd');       /</span><span class="regexp">/ true</span></span><br><span class="line"><span class="regexp">/</span>(fred)+<span class="regexp">/.test('fredfred');  /</span><span class="regexp">/ true</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">var m = 'abcabc'.match(/</span>(.)b(.)/);</span><br><span class="line">m;   <span class="comment">// ['abc', 'a', 'c']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以用\n引用括号匹配的内容，n是从1开始的自然数，表示对应顺序的括号：</span></span><br><span class="line">/(.)b(.)\<span class="number">1</span>b\<span class="number">2</span>/.test(<span class="string">"abcabc"</span>);    <span class="comment">// true</span></span><br><span class="line">/y((..)\<span class="number">2</span>)\<span class="number">1</span>/.test(<span class="string">'yabababab'</span>);  <span class="comment">// true   \1指向外层括号，\2指向内层括号</span></span><br></pre></td></tr></table></figure></p>
+<p>12.正则的实例方法：test()和exec()都是正则放在前面。</p>
+<ul>
+<li><p>①<code>test()</code>方法返回一个布尔值，表示当前模式是否能匹配参数字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/cat/.test(<span class="string">'cats and dogs'</span>) <span class="comment">// true</span></span><br><span class="line"><span class="keyword">var</span> r = <span class="regexp">/x/g</span>;</span><br><span class="line"><span class="keyword">var</span> s = <span class="string">'_x_x'</span>;</span><br><span class="line"></span><br><span class="line">r.lastIndex;   <span class="comment">// 0</span></span><br><span class="line">r.test(s);     <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">r.lastIndex;   <span class="comment">// 2</span></span><br><span class="line">r.test(s);     <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">r.lastIndex;   <span class="comment">// 4</span></span><br><span class="line">r.test(s);     <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②<code>exec()</code>方法，用来返回匹配结果。如果发现匹配，就返回一个数组，成员是匹配成功的子字符串，否则返回null：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">'_x_x'</span>;</span><br><span class="line"><span class="keyword">var</span> r1 = <span class="regexp">/x/</span>;</span><br><span class="line"><span class="keyword">var</span> r2 = <span class="regexp">/y/</span>;</span><br><span class="line"></span><br><span class="line">r1.exec(s);   <span class="comment">// ["x"]</span></span><br><span class="line">r2.exec(s);   <span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>13.字符串的实例方法：match()、search()、replace()、split()，正则放在后面。</p>
+<ul>
+<li><p>①<code>match()</code>: 返回一个数组，成员是所有匹配的子字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">'_x_x'</span>;</span><br><span class="line"><span class="keyword">var</span> r1 = <span class="regexp">/x/</span>;</span><br><span class="line"><span class="keyword">var</span> r2 = <span class="regexp">/y/</span>;</span><br><span class="line"></span><br><span class="line">s.match(r1);   <span class="comment">// ["x"]</span></span><br><span class="line">s.match(r2);   <span class="comment">// null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置正则表达式的lastIndex属性，对match方法无效，匹配总是从字符串的第一个字符开始:</span></span><br><span class="line"><span class="keyword">var</span> r = <span class="regexp">/a|b/g</span>;</span><br><span class="line">r.lastIndex = <span class="number">7</span>;</span><br><span class="line"><span class="string">'xaxb'</span>.match(r);   <span class="comment">// ['a', 'b']</span></span><br><span class="line">r.lastIndex;       <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②<code>search()</code>：按照给定的正则表达式进行搜索，返回一个整数，表示匹配开始的位置。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'_x_x'</span>.search(<span class="regexp">/x/</span>);   <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>③<code>replace()</code>：按照给定的正则表达式进行替换，返回替换后的字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'aaa'</span>.replace(<span class="string">'a'</span>, <span class="string">'b'</span>);   <span class="comment">// "baa"</span></span><br><span class="line"><span class="string">'aaa'</span>.replace(<span class="regexp">/a/</span>, <span class="string">'b'</span>);   <span class="comment">// "baa"</span></span><br><span class="line"><span class="string">'aaa'</span>.replace(<span class="regexp">/a/g</span>, <span class="string">'b'</span>);  <span class="comment">// "bbb"  添加修饰符g才会进行整体替换，否则只替换第一个匹配</span></span><br><span class="line"><span class="string">'JavaScript'</span>.replace(<span class="regexp">/([A-Z])/g</span>, <span class="string">'_$&amp;'</span>)   <span class="comment">// "_Java_Script"  ‘$&amp;’表示所匹配到的文本，所以第一个就相当于匹配到J后，用_J来替换</span></span><br><span class="line"><span class="keyword">let</span> email = <span class="string">'Betterman@163.com'</span>;</span><br><span class="line"><span class="keyword">let</span> username = email.replace(<span class="regexp">/(.*)@.*/</span>, <span class="string">'$1'</span>);   <span class="comment">// 'Betterman'  截取某段名称</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数返回所要替换的内容：</span></span><br><span class="line"><span class="keyword">let</span> re = <span class="regexp">/(.*)@(.*)\.(.*)/</span>,  glob;</span><br><span class="line"><span class="keyword">let</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">     glob = <span class="built_in">arguments</span>;</span><br><span class="line">     <span class="keyword">return</span> <span class="built_in">arguments</span>[<span class="number">1</span>] + <span class="string">' at '</span> + <span class="built_in">arguments</span>[<span class="number">2</span>] + <span class="string">' dot '</span> + <span class="built_in">arguments</span>[<span class="number">3</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> res = <span class="string">'Betterman@shenzhen.com'</span>.replace(re, callback); </span><br><span class="line"><span class="built_in">console</span>.log(res);    <span class="comment">// Betterman at shenzhen dot com</span></span><br><span class="line"><span class="built_in">console</span>.log(glob);  <span class="comment">// ["Betterman@shenzhen.com", "Betterman", "shenzhen", "com", 0, "Betterman@shenzhen.com"]</span></span><br><span class="line"><span class="comment">// 正则表达式所匹配到的内容  第一组  第二组  第三组  匹配内容所在位置  所进行匹配的字符串（原字符串）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>④<code>split()</code>：按照给定规则进行字符串分割，返回一个数组，包含分割后的各个成员。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 非正则分隔：</span></span><br><span class="line"><span class="string">'a,  b,c, d'</span>.split(<span class="string">','</span>);     <span class="comment">// [ 'a', '  b', 'c', ' d' ] 注意有空格</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正则分隔，去除多余的空格：</span></span><br><span class="line"><span class="string">'a,  b,c, d'</span>.split(<span class="regexp">/, */</span>);   <span class="comment">// [ 'a', 'b', 'c', 'd' ]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定返回数组的最大成员数:</span></span><br><span class="line"><span class="string">'a,  b,c, d'</span>.split(<span class="regexp">/, */</span>, <span class="number">2</span>);  <span class="comment">// [ 'a', 'b' ]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者：</span></span><br><span class="line"><span class="keyword">let</span> space = <span class="string">'one, two,three ,four'</span>;</span><br><span class="line">space.split(<span class="string">','</span>);         <span class="comment">// ["one", " two", "three ", "four"]   有空格存在</span></span><br><span class="line">space.split(<span class="regexp">/\s*,\s*/</span>);   <span class="comment">// ["one", "two", "three", "four"]    无空格</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>14.处理文章段落，给行首和行尾用正则raplace(/^/gn,’</p><p>‘).replace(/$/gn,’</p>‘)来加上p标签。<p></p>
+<h3 id="五、面向对象"><a href="#五、面向对象" class="headerlink" title="五、面向对象"></a>五、面向对象</h3><p>1.面向对象：将真实世界各种复杂的关系，抽象为一个个对象，然后由对象之间的分工与合作，完成对真实世界的模拟。</p>
+<p>2.面向对象具有封装性、继承性、多态性。把同类或者功能整理封装归类，需要什么就去找什么，就相当于把功能封装进对象，我们只是把功能拿来用就行，而不需要了解其实现的原理，对象也不需要知道我们用这个功能来做什么。</p>
+<h4 id="5-1-this"><a href="#5-1-this" class="headerlink" title="5.1 this"></a>5.1 this</h4><p>1.this永远指向最后调用它的那个对象(使用箭头函数除外)。</p>
+<p>2.this判断：优先级</p>
+<ul>
+<li>①是否是new绑定；</li>
+<li>②是否是显式(硬)绑定，如call、apply、bind；（传入null或undefined时就是想忽略this，会启用默认绑定window，所以最好创建一个空对象来替代，如Object.create(null)，这个比{}更空）;</li>
+<li>③是否是隐式绑定，对象调用这个函数；</li>
+<li>④默认绑定，window。</li>
+</ul>
+<p>3.this绑定：</p>
+<ul>
+<li><p>①<code>call</code>：参数应该是一个对象，如果参数为空、null和undefined，则默认传入全局对象，第一个参数就是this所要指向的那个对象，后面的参数则是函数调用时所需的参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line">add.call(<span class="keyword">this</span>, <span class="number">1</span>, <span class="number">2</span>);   <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②<code>apply</code>：与call一样，只是参数为数组而已：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 找出数组最大元素</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">10</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">15</span>, <span class="number">9</span>]);   <span class="comment">// 15</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>③<code>bind</code>：返回一个新函数，而不是像call、apply直接执行返回值。</p>
+</li>
+</ul>
+<h4 id="5-2-原型与继承"><a href="#5-2-原型与继承" class="headerlink" title="5.2 原型与继承"></a>5.2 原型与继承</h4><p>1.可参考我之前写的一篇博客：<a href="https://juejin.im/post/5bf3d8936fb9a04a072ffba1" target="_blank" rel="noopener">彻底弄懂JS原型与继承</a>。</p>
+<p>2.创建实例前与创建实例后修改构造函数原型的区别：</p>
+<ul>
+<li><p>①如果在已经生成实例的情况下再给构造函数新创建一个原型，则会切断了构造函数与最初原型的联系，即新原型覆盖了旧原型。但此时实例上的原型依旧指向最初的原型，而不是指向新构建的原型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">let</span> person1 = <span class="keyword">new</span> Person();</span><br><span class="line">Person.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: Person,</span><br><span class="line">    name: 'BetterMan',</span><br><span class="line">    age: 26,</span><br><span class="line">    sayName: function()&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">person1.sayName();   <span class="comment">// 报错，实例依旧指向旧原型</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②如果在创建实例前重写构造函数的原型，实例的原型是指向重写后的原型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">Person.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: Person,</span><br><span class="line">    name: 'BetterMan',</span><br><span class="line">    age: 26,</span><br><span class="line">    sayName: function()&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> person1 = <span class="keyword">new</span> Person(); </span><br><span class="line">person1.sayName();    <span class="comment">// "BetterMan"</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>3.<code>__proto__</code></p>
+<ul>
+<li><code>实例.__proto__  === 构造函数.prototype    // true</code></li>
+<li><code>__proto__</code>虽然可以得到实例的原型，但<code>__proto__</code>和<code>prototype</code>不是等价的</li>
+<li><code>__proto__</code>实际上是实例对象的属性，而<code>prototype</code>是属于构造器函数的属性</li>
+</ul>
+<p>4.<code>__proto__</code>与其说是属性，实际更像是<code>getter/setter</code>，像一个函数，访问<code>a.__proto__</code>时，实际上是调用<code>a.__proto__()</code>，<code>__ptoto__</code>是继承自<code>Object.prototype</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.definedProperty(<span class="built_in">Object</span>.prototype, <span class="string">'__proto__'</span>, &#123;</span><br><span class="line">   		<span class="keyword">get</span>: function() &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">Object</span>.getPrototypeOf(<span class="keyword">this</span>);</span><br><span class="line">           &#125;,</span><br><span class="line">        <span class="keyword">set</span>: function(o) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">Object</span>.setPrototypeOf(<span class="keyword">this</span>, o);</span><br><span class="line">          &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>5.几种特殊的原型：</p>
+<ul>
+<li><p>①空对象的原型是 Object.prototype：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(&#123;&#125;) === <span class="built_in">Object</span>.prototype   <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②Object.prototype 的原型是 null：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>.prototype) === <span class="literal">null</span>   <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>③函数的原型是 Function.prototype：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="built_in">Object</span>.getPrototypeOf(f) === <span class="built_in">Function</span>.prototype   <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>6.Object.create()方法的基本原理：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params">o</span>) </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="5-3-类"><a href="#5-3-类" class="headerlink" title="5.3 类"></a>5.3 类</h4><p>1.类就像设计师设计出的蓝图，实例就像根据蓝图所建造出来的建筑。</p>
+<p>2.js的类不像标准的类是复制一个副本，它类似于共享。</p>
+<p>3.标准的继承应该是类与类之间的关系，而js的继承时“类”与实例之间的关系，或者应该说是对象与对象之间的关系。</p>
+<p>4.继承的原本意思应该是复制，而js默认是不会复制对象属性的，相反，js会在两个对象之间创建一个关联，这样一个对象就可以通过<code>委托</code>访问另一个对象的属性和函数，进而找到所需要的属性，<code>委托</code>行为意味着某些对象在找不到属性或方法时，会把这个请求委托给另一个对象，这并不是像父类到子类的关系垂直组织的，而是通过任意方向的委托关系并排组织的。</p>
+<p>5.</p>
+<ul>
+<li><p>①将B.prototype关联到A.prototype的方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6前：</span></span><br><span class="line">B.prototype = <span class="keyword">new</span> A();</span><br><span class="line"></span><br><span class="line"><span class="comment">//ES6：</span></span><br><span class="line"><span class="built_in">Object</span>.setPrototypeOf(B.prototype, A.prototype);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>②判断某个对象的原型链上是否存在某对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式一：</span></span><br><span class="line">F.prototype.isPrototypeOf(a);</span><br><span class="line"></span><br><span class="line"><span class="comment">//方式二：</span></span><br><span class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === F.prototype;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>因为比较多，所以目前只整理到这里，后续有些比较重要难懂的模块会分开更新，同时包括ES6的部分，希望对你有所帮助，如有不合理的地方欢迎指正，喜欢的话欢迎关注一波，后续会持续更新。</p>
+<p><a href="https://github.com/chen-yulun" target="_blank" rel="noopener">GitHub传送门</a><br><a href="https://www.cnblogs.com/BetterMan-/" target="_blank" rel="noopener">博客园传送门</a><br><img src="https://user-gold-cdn.xitu.io/2018/12/21/167d05bdfff953ad?w=580&amp;h=580&amp;f=jpeg&amp;s=20251" alt></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/21/你可能遗漏的JS知识点(一)/" rel="next" title="你可能遗漏的JS知识点(一)">
+                <i class="fa fa-chevron-left"></i> 你可能遗漏的JS知识点(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/07/闭包该如何理解？/" rel="prev" title="闭包该如何理解？">
+                闭包该如何理解？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">陈煜仑</p>
+              <p class="site-description motion-element" itemprop="description">种一棵树最好的时间是十年前，还有现在</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、运算符"><span class="nav-number">2.</span> <span class="nav-text">三、运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1运算符"><span class="nav-number">2.1.</span> <span class="nav-text">3.1运算符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、内置对象"><span class="nav-number">3.</span> <span class="nav-text">四、内置对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-Date"><span class="nav-number">3.1.</span> <span class="nav-text">4.1 Date</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Math"><span class="nav-number">3.2.</span> <span class="nav-text">4.2 Math</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-RegExp"><span class="nav-number">3.3.</span> <span class="nav-text">4.3 RegExp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、面向对象"><span class="nav-number">4.</span> <span class="nav-text">五、面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-this"><span class="nav-number">4.1.</span> <span class="nav-text">5.1 this</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-原型与继承"><span class="nav-number">4.2.</span> <span class="nav-text">5.2 原型与继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-类"><span class="nav-number">4.3.</span> <span class="nav-text">5.3 类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">5.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈煜仑</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="theme-info"><a href="https://github.com/chen-yulun" class="theme-link" rel="noopener" target="_blank">GitHub</a> - <a href="https://juejin.im/user/5ba9ea3c5188255c8b6ef168/posts" class="theme-link" rel="noopener" target="_blank">掘金博客</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

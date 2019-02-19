@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言本文主要从webpack4.x入手，会对平时常用的Webpack配置一一讲解，各个功能点都有对应的详细例子，所以本文也比较长，但如果你能动手跟着本文中的例子完整写一次，相信你会觉得Webpack也不过如此。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack4.x最详细入门讲解">
+<meta property="og:url" content="http://yoursite.com/2018/11/12/webpack4.x最详细入门讲解/index.html">
+<meta property="og:site_name" content="Chen&#39;s blog">
+<meta property="og:description" content="前言本文主要从webpack4.x入手，会对平时常用的Webpack配置一一讲解，各个功能点都有对应的详细例子，所以本文也比较长，但如果你能动手跟着本文中的例子完整写一次，相信你会觉得Webpack也不过如此。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1b7cb8b6?w=1055&h=411&f=png&s=39688">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1d87b9d4?w=802&h=290&f=png&s=30843">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1db8161d?w=243&h=202&f=png&s=7579">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1dda4dd6?w=1034&h=306&f=png&s=47987">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1e12e266?w=600&h=219&f=png&s=7158">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1e23341d?w=485&h=220&f=png&s=29338">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d41981d20?w=636&h=304&f=png&s=35574">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d47dbb7cf?w=1025&h=484&f=png&s=83105">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d4ae84db8?w=248&h=295&f=png&s=13605">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dd7ddd4e5?w=520&h=229&f=png&s=5124">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dda86d13c?w=1030&h=409&f=png&s=68163">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddbdb0175?w=527&h=250&f=png&s=4549">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddbeac2a4?w=243&h=222&f=png&s=8674">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddc902a03?w=581&h=110&f=png&s=16515">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dde5c7794?w=640&h=287&f=png&s=33902">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df47b8bbb?w=195&h=260&f=png&s=9236">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df5af1e05?w=506&h=212&f=png&s=6121">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df7fa7017?w=856&h=423&f=png&s=49231">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dfd653089?w=1354&h=523&f=png&s=81245">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dfe7217c6?w=1355&h=312&f=png&s=49057">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e03ef5426?w=1360&h=314&f=png&s=50046">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e10caf009?w=1364&h=311&f=png&s=49796">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e11ba9411?w=1017&h=111&f=png&s=42926">
+<meta property="og:updated_time" content="2019-02-19T03:53:45.904Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack4.x最详细入门讲解">
+<meta name="twitter:description" content="前言本文主要从webpack4.x入手，会对平时常用的Webpack配置一一讲解，各个功能点都有对应的详细例子，所以本文也比较长，但如果你能动手跟着本文中的例子完整写一次，相信你会觉得Webpack也不过如此。">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1b7cb8b6?w=1055&h=411&f=png&s=39688">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/12/webpack4.x最详细入门讲解/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>webpack4.x最详细入门讲解 | Chen's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>blog</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>archive</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/12/webpack4.x最详细入门讲解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈煜仑">
+      <meta itemprop="description" content="种一棵树最好的时间是十年前，还有现在">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webpack4.x最详细入门讲解
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-12 11:43:15" itemprop="dateCreated datePublished" datetime="2018-11-12T11:43:15+08:00">2018-11-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-19 11:53:45" itemprop="dateModified" datetime="2019-02-19T11:53:45+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文主要从webpack4.x入手，会对平时常用的Webpack配置一一讲解，各个功能点都有对应的详细例子，所以本文也比较长，但如果你能动手跟着本文中的例子完整写一次，相信你会觉得Webpack也不过如此。<br><a id="more"></a><br>&nbsp; </p>
+<h3 id="一、什么是webpack，为什么使用它？"><a href="#一、什么是webpack，为什么使用它？" class="headerlink" title="一、什么是webpack，为什么使用它？"></a>一、什么是webpack，为什么使用它？</h3><p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1b7cb8b6?w=1055&amp;h=411&amp;f=png&amp;s=39688" alt> </p>
+<h4 id="1-1-什么是webpack？"><a href="#1-1-什么是webpack？" class="headerlink" title="1.1 什么是webpack？"></a>1.1 什么是webpack？</h4><p>简单来说，它其实就是一个<strong>模块打包器</strong>。<br>&nbsp; </p>
+<h4 id="1-2-为什么使用它？"><a href="#1-2-为什么使用它？" class="headerlink" title="1.2 为什么使用它？"></a>1.2 为什么使用它？</h4><p>如果像以前开发时一个html文件可能会引用十几个js文件,而且顺序还不能乱，因为它们存在依赖关系，同时对于ES6+等新的语法，less, sass等CSS预处理都不能很好的解决……，此时就需要一个处理这些问题的工具。</p>
+<p>Webpack就是为处理这些问题而生的，它就是把你的项目当成一个整体，通过一个入口主文件（如：index.js）,从这个文件开始找到你的项目所有的依赖文件并处理它们，最后打包成一个（或多个）浏览器可识别的JavaScript文件。</p>
+<h3 id="二、一个简单的打包例子"><a href="#二、一个简单的打包例子" class="headerlink" title="二、一个简单的打包例子"></a>二、一个简单的打包例子</h3><h4 id="2-1-准备工作"><a href="#2-1-准备工作" class="headerlink" title="2.1 准备工作"></a>2.1 准备工作</h4><p>首先新建一个空文件夹，用于创建项目，在终端中进入文件夹，如下我在桌面建了一个名为webpack-project的文件夹，使用终端进入文件夹后（如果对命令行不太熟悉，可参考我的博客：<a href="https://juejin.im/post/5ba9ead06fb9a05d26596151" target="_blank" rel="noopener">命令行不会？看这里</a>），使用<code>npm init</code>命令创建一个package.json文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1d87b9d4?w=802&amp;h=290&amp;f=png&amp;s=30843" alt> </p>
+<p>输入这个命令后，终端会问你一系列诸如项目名称，项目描述，作者等信息，不过如果你不打算发布这个模块，直接一路回车就好。（也可以使用<code>npm init -y</code>这个命令来一次生成package.json文件，这样终端不会询问你问题）。<br>&nbsp; </p>
+<h4 id="2-2-安装webpack"><a href="#2-2-安装webpack" class="headerlink" title="2.2 安装webpack"></a>2.2 安装webpack</h4><p>如果你想一步到位的话，就把全局<code>webpack</code>、<code>webpack-cli</code>和本地项目<code>webpack</code>、<code>webpack-cli</code>全都先装了，因为后面一些模块会用到。安装<code>webapck</code>时把<code>webpack-cli</code>也装上是因为在<code>webpack4.x</code>版本后webpack模块把一些功能分到了<code>webpack-cli</code>模块，所以两者都需要安装，安装方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install webpack webpack-cli --global    //这是安装全局webpack及webpack-cli模块</span><br><span class="line">npm install webpack webpack-cli --save-dev  //这是安装本地项目模块</span><br></pre></td></tr></table></figure></p>
+<h4 id="tips"><a href="#tips" class="headerlink" title="tips:"></a>tips:</h4><blockquote>
+<p>上述命令可采用简写，<code>install</code>可简写为<code>i</code>,<code>--global</code>可简写为<code>-g</code>,<code>--save-dev</code>可简写为<code>-D</code>(这个命令是用于把配置添加到package.json的开发环境配置列表中，后面会提到)，<code>--save</code>可简写为<code>-S</code>，同时国内我们可以采用cnpm，配置方法可<a href="http://npm.taobao.org/" target="_blank" rel="noopener">去这里</a>查看，这样安装速度会相对较快。如下：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cnpm i webpack -g               //这是安装全局webpack命令</span><br><span class="line">cnpm i webpack webpack-cli -D   //这是安装本地项目模块</span><br></pre></td></tr></table></figure>
+<p>&nbsp; </p>
+<h4 id="2-3-新建文件"><a href="#2-3-新建文件" class="headerlink" title="2.3 新建文件"></a>2.3 新建文件</h4><p>在<code>webpack-project</code>文件夹中新建两个文件夹，分别为src文件夹和dist文件夹，接下来再创建三个文件:</p>
+<ul>
+<li><code>index.html</code> –放在dist文件夹中；</li>
+<li><code>hello.js</code> –放在src文件夹中；</li>
+<li><code>index.js</code> –放在src文件夹中；</li>
+</ul>
+<p>此时，项目结构如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1db8161d?w=243&amp;h=202&amp;f=png&amp;s=7579" alt></p>
+<p>我们在<code>index.html</code>中写下<code>html</code>代码，它的作用是为了引入我们打包后的js文件：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Webpack Project<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'root'</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>   <span class="comment">&lt;!--这是打包之后的js文件，我们暂时命名为bundle.js--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>我们在<code>hello.js</code>中导出一个模块：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hello.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> hello = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    hello.innerHTML = <span class="string">"Long time no see!"</span>;</span><br><span class="line">    <span class="keyword">return</span> hello;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>index.js</code>中引入这个模块（<code>hello.js</code>）:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js </span></span><br><span class="line"><span class="keyword">const</span> hello = <span class="built_in">require</span>(<span class="string">'./hello.js'</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">"#root"</span>).appendChild(hello());</span><br></pre></td></tr></table></figure></p>
+<p>上述操作就相当于我们把<code>hello.js</code>模块合并到了<code>index.js</code>模块，之后我们打包时就只需把<code>index.js</code>模块打包成<code>bundle.js</code>，然后供<code>index.html</code>引用即可，这就是最简单的webpack打包原理。<br>&nbsp; </p>
+<h4 id="2-4-开始进行webpack打包"><a href="#2-4-开始进行webpack打包" class="headerlink" title="2.4 开始进行webpack打包"></a>2.4 开始进行webpack打包</h4><p>在终端中使用如下命令进行打包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// webpack全局安装的情况下</span><br><span class="line">webpack src/index.js --output dist/bundle.js  </span><br><span class="line">// --output可简写为-o</span><br></pre></td></tr></table></figure></p>
+<p>上述就相当于把<code>src</code>文件夹下的<code>index.js</code>文件打包到<code>dist</code>文件下的<code>bundle.js</code>，这时就生成了<code>bundle.js</code>供<code>index.html</code>文件引用。</p>
+<p>结果如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1dda4dd6?w=1034&amp;h=306&amp;f=png&amp;s=47987" alt></p>
+<p>可以看出webpack同时编译了<code>index.js</code>和<code>hello.js</code>,现在打开<code>index.html</code>,可以看到如下结果:</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1e12e266?w=600&amp;h=219&amp;f=png&amp;s=7158" alt> </p>
+<p>没错，我们已经成功使用webpack进行打包，原来webpack也不过如此嘛！但是，每次都在终端中输入这么长的命令，感觉好烦啊，还好有懒人方法，让我们看看。<br>&nbsp; </p>
+<h4 id="2-5-通过配置文件来使用webpack"><a href="#2-5-通过配置文件来使用webpack" class="headerlink" title="2.5 通过配置文件来使用webpack"></a>2.5 通过配置文件来使用webpack</h4><p>其实webpack是有很多功能的，也是很方便的，我们可以在当前项目的根目录下新建一个配置文件<code>webpack.config.js</code>，我们写下如下简单配置代码，目前只涉及入口配置（相当于我们的<code>index.js</code>，从它开始打包）和出口配置（相当于我们打包生成的<code>bundle.js</code>）。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: __dirname + <span class="string">"/src/index.js"</span>, <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: __dirname + <span class="string">"/dist"</span>, <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注：<code>__dirname</code>是node.js中的一个全局变量，它指向当前执行脚本所在的目录，即C:\Users\sjt\DeskTop\webpack-project（这是我当前的目录）</p>
+</blockquote>
+<p>但平时我们看到的脚手架配置也比较喜欢采用node.js的<code>path</code>模块来处理绝对路径，所以我们也可以采用如下的写法，和上述的效果是一样的：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注：<code>path.join</code>的功能是拼接路径片段。</p>
+</blockquote>
+<p>有了这个配置文件，我们只需在终端中运行<code>webpack</code>命令就可进行打包，这条命令会自动引用webpack.config.js文件中的配置选项，示例如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d1e23341d?w=485&amp;h=220&amp;f=png&amp;s=29338" alt> </p>
+<p>搞定，是不是这样更方便了，感觉没那么low了，但还能不能更便捷智能呢？那必须的！<br>&nbsp; </p>
+<h4 id="2-6-更智能的打包方式"><a href="#2-6-更智能的打包方式" class="headerlink" title="2.6 更智能的打包方式"></a>2.6 更智能的打包方式</h4><p>我们现在只在终端中使用<code>webpack</code>命令来进行打包，要是以后在打包的同时还有更多的操作呢，那不是还得写上更多的命令？所以我们得想办法把这些命令都集成起来，这时候之前的<code>package.json</code>文件就派上用场了。<br>现在的package.json文件大概就是如下这样：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"webpack-project"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span> //我们要修改的是这里，JSON文件不支持注释，引用时请清除</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"keywords"</span>: [],</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"webpack"</span>: <span class="string">"^4.23.1"</span>,</span><br><span class="line">    <span class="attr">"webpack-cli"</span>: <span class="string">"^3.1.2"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"webpack-project"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    "start": "webpack", //改成这样，注意使用时把注释删掉</span><br><span class="line">  &#125;,</span><br><span class="line">  "keywords": [],</span><br><span class="line">  "author": "",</span><br><span class="line">  "license": "ISC",</span><br><span class="line">  "devDependencies": &#123;</span><br><span class="line">    "webpack": "^4.23.1",</span><br><span class="line">    "webpack-cli": "^3.1.2"</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注：package.json中的script会按你设置的命令名称来执行对应的命令。</p>
+</blockquote>
+<p>这样我们就可以在终端中直接执行<code>npm start</code>命令来进行打包，<code>start</code>命令比较特殊，可以直接<code>npm</code>加上<code>start</code>就可以执行，如果我们想起其他的名称，如<code>build</code>时，就需要使用<code>npm run</code>加上<code>build</code>，即<code>npm run build</code>命令。<br>现在我们执行<code>npm start</code>命令：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d41981d20?w=636&amp;h=304&amp;f=png&amp;s=35574" alt> </p>
+<p>OK，搞定，是不是很简单，但webpack的功能远不止于此，下面我们继续。<br>&nbsp; </p>
+<h3 id="三、构建本地服务器"><a href="#三、构建本地服务器" class="headerlink" title="三、构建本地服务器"></a>三、构建本地服务器</h3><p>现在我们是通过打开本地文件来查看页面的，看起来总感觉比较low，看别人用vue，react框架时都是运行在本地服务器上的，那我们能不能也那样呢？那必须的！<br>&nbsp; </p>
+<h4 id="3-1-webpack-dev-server配置本地服务器"><a href="#3-1-webpack-dev-server配置本地服务器" class="headerlink" title="3.1 webpack-dev-server配置本地服务器"></a>3.1 webpack-dev-server配置本地服务器</h4><p>Webpack提供了一个可选的本地开发服务器，这个本地服务器基于node.js构建，它是一个单独的组件，在webpack中进行配置之前需要单独安装它作为项目依赖：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i webpack-dev-server -D</span><br></pre></td></tr></table></figure></p>
+<p>devServer作为webpack配置选项中的一项，以下是它的一些配置选项:</p>
+<ul>
+<li><code>contentBase</code>  ：设置服务器所读取文件的目录，当前我们设置为”./dist”</li>
+<li><code>port</code>  ：设置端口号，如果省略，默认为<code>8080</code></li>
+<li><code>inline</code>  ：设置为<code>true</code>，当源文件改变时会自动刷新页面</li>
+<li><code>historyApiFallback</code>  ：设置为<code>true</code>，所有的跳转将指向<code>index.html</code></li>
+</ul>
+<p>现在我们把这些配置加到<code>webpack.config.js</code>文件上，如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,   <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们继续在<code>package.json</code>文件中添加启动命令：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"webpack-project"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack"</span>,</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --open"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"keywords"</span>: [],</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"webpack"</span>: <span class="string">"^4.23.1"</span>,</span><br><span class="line">    <span class="attr">"webpack-cli"</span>: <span class="string">"^3.1.2"</span>,</span><br><span class="line">    <span class="attr">"webpack-dev-server"</span>: <span class="string">"^3.1.10"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们把<code>start</code>命令名称改为了<code>build</code>，这样比较语义化，平时的脚手架也多数采用这个名称，我们用<code>dev</code>（development的缩写，意指开发环境）来启动本地服务器，<code>webpack-dev-server</code>就是启动服务器的命令，<code>--open</code>是用于启动完服务器后自动打开浏览器，这时候我们自定义命令方式的便捷性就体现出来了，可以多个命令集成在一起运行，即我们定义了一个<code>dev</code>命令名称就可以同时运行了<code>webpack-dev-server</code>和<code>--open</code>两个命令。</p>
+<p>现在在终端输入<code>npm run dev</code>运行服务器：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d47dbb7cf?w=1025&amp;h=484&amp;f=png&amp;s=83105" alt> </p>
+<p>这样我们即可在<a href="http://localhost:8088/中查看页面(退出服务器，可使用`ctrl+c`后，再按`y`确认，即可退出服务器运行)" target="_blank" rel="noopener">http://localhost:8088/中查看页面(退出服务器，可使用`ctrl+c`后，再按`y`确认，即可退出服务器运行)</a><br>&nbsp; </p>
+<h4 id="3-2-Source-Maps调试配置"><a href="#3-2-Source-Maps调试配置" class="headerlink" title="3.2 Source Maps调试配置"></a>3.2 Source Maps调试配置</h4><p>作为开发，代码调试当然少不了，那么问题来了，经过打包后的文件，你是不容易找到出错的地方的，<code>Source Map</code>就是用来解决这个问题的。</p>
+<p>通过如下配置，我们会在打包时生成对应于打包文件的<code>.map</code>文件，使得编译后的代码可读性更高，更易于调试。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置好后，我们再次运行<code>npm run build</code>进行打包，这时我们会发现在<code>dist</code>文件夹中多出了一个<code>bundle.js.map</code>文件如下：<br><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1d4ae84db8?w=248&amp;h=295&amp;f=png&amp;s=13605" alt><br>如果我们的代码有bug，在浏览器的调试工具中会提示错误出现的位置，这就是<code>devtool: &#39;source-map&#39;</code>配置项的作用。<br>&nbsp; </p>
+<h3 id="四、Loaders"><a href="#四、Loaders" class="headerlink" title="四、Loaders"></a>四、Loaders</h3><p>loaders是webpack最强大的功能之一，通过不同的loader，webpack有能力调用外部的脚本或工具，实现对不同格式的文件的处理，例如把<code>scss</code>转为<code>css</code>，将ES66、ES7等语法转化为当前浏览器能识别的语法，将JSX转化为js等多项功能。</p>
+<p>Loaders需要单独安装并且需要在<code>webpack.config.js</code>中的<code>modules</code>配置项下进行配置，Loaders的配置包括以下几方面：</p>
+<ul>
+<li><code>test</code>：一个用以匹配loaders所处理文件的拓展名的正则表达式（必须）</li>
+<li><code>loader</code>：loader的名称（必须）</li>
+<li><code>include/exclude</code>：手动添加必须处理的文件（文件夹）或屏蔽不需要处理的文件（文件夹）（可选）；</li>
+<li><code>options</code>：为loaders提供额外的设置选项（可选）</li>
+</ul>
+<p>&nbsp; </p>
+<h4 id="4-1-配置css-loader"><a href="#4-1-配置css-loader" class="headerlink" title="4.1 配置css-loader"></a>4.1 配置css-loader</h4><p>如果我们要加载一个css文件，需要安装配置<code>style-loader</code>和<code>css-loader</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i style-loader css-loader -D</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在src文件夹下新建<code>css</code>文件夹，该文件夹内新建<code>style.css</code>文件：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* style.css */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: gray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>index.js</code>中引用它：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js </span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./css/style.css'</span>;  <span class="comment">//导入css</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> hello = <span class="built_in">require</span>(<span class="string">'./hello.js'</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">"#root"</span>).appendChild(hello());</span><br></pre></td></tr></table></figure></p>
+<p>这时我们运行<code>npm run dev</code>，会发现页面背景变成了灰色。</p>
+<p>如果是要编译sass文件呢？<br>&nbsp; </p>
+<h4 id="4-2-配置sass"><a href="#4-2-配置sass" class="headerlink" title="4.2 配置sass"></a>4.2 配置sass</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i sass-loader node-sass -D // 因为sass-loader依赖于node-sass，所以还要安装node-sass</span><br></pre></td></tr></table></figure>
+<p>增加sass的rules:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在css文件夹中新建<code>blue.scss</code>文件：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* blue.scss */</span></span><br><span class="line"><span class="variable">$blue</span>: blue;</span><br><span class="line"><span class="selector-tag">body</span>&#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="variable">$blue</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>index.js</code>中引入<code>blue.scss</code>：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js </span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./css/style.css'</span>;   <span class="comment">// 导入css</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./css/blue.scss'</span>;   <span class="comment">// 导入scss</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> hello = <span class="built_in">require</span>(<span class="string">'./hello.js'</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">"#root"</span>).appendChild(hello());</span><br></pre></td></tr></table></figure></p>
+<p>这时<code>npm run dev</code>重新启动服务器，应该会出现如下结果：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dd7ddd4e5?w=520&amp;h=229&amp;f=png&amp;s=5124" alt></p>
+<p>还有诸如图片loader、字体loader等就不一一列出来了，感兴趣的可前往<a href="https://www.webpackjs.com/guides/asset-management/" target="_blank" rel="noopener">webpack官网</a>查看，都是一样的套路。<br>&nbsp; </p>
+<h3 id="五、Babel"><a href="#五、Babel" class="headerlink" title="五、Babel"></a>五、Babel</h3><p>Babel其实是一个编译JavaScript的平台，它可以编译代码帮你达到以下目的：</p>
+<ul>
+<li>让你能使用最新的JavaScript代码（ES6，ES7…），而不用管新标准是否被当前使用的浏览器完全支持；</li>
+<li>让你能使用基于JavaScript进行了拓展的语言，比如React的JSX；<br>&nbsp; <h4 id="5-1-Babel的安装与配置"><a href="#5-1-Babel的安装与配置" class="headerlink" title="5.1 Babel的安装与配置"></a>5.1 Babel的安装与配置</h4>Babel其实是几个模块化的包，其核心功能位于称为<code>babel-core</code>的npm包中，webpack可以把其不同的包整合在一起使用，对于每一个你需要的功能或拓展，你都需要安装单独的包（用得最多的是解析ES6的<code>babel-preset-env</code>包和解析JSX的<code>babel-preset-react</code>包）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cnpm i babel-core babel-loader babel-preset-env babel-preset-react -D</span><br><span class="line">// babel-preset-env的env表示是对当前环境的预处理，而不是像以前使用babel-preset-es2015只能针对某个环境</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;                             <span class="comment">// jsx配置</span></span><br><span class="line">                test: <span class="regexp">/(\.jsx|\.js)$/</span>,   </span><br><span class="line">                use: &#123;                    <span class="comment">// 注意use选择如果有多项配置，可写成这种对象形式</span></span><br><span class="line">                    loader: <span class="string">"babel-loader"</span>,</span><br><span class="line">                    options: &#123;</span><br><span class="line">                        presets: [</span><br><span class="line">                            <span class="string">"env"</span>, <span class="string">"react"</span></span><br><span class="line">                        ]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们已经可以支持ES6及JSX的语法了，我们用react来试试，但使用react还得先安装两个模块<code>react</code>和<code>react-dom</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i react react-dom -S</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们把<code>hello.js</code>文件修改一下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hello.js</span></span><br><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span>; <span class="comment">// 这两个模块必须引入</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">'Alan'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &#123;name&#125;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>修改<code>index.js</code>文件：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//index.js </span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./css/style.css'</span>;  <span class="comment">// 导入css</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./css/blue.scss'</span>;  <span class="comment">// 导入scss</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;render&#125; <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> Hello <span class="keyword">from</span> <span class="string">'./hello'</span>; <span class="comment">// 可省略.js后缀名</span></span><br><span class="line"></span><br><span class="line">render(<span class="xml"><span class="tag">&lt;<span class="name">Hello</span> /&gt;</span>, document.getElementById('root'));</span></span><br></pre></td></tr></table></figure></p>
+<p>此时运行<code>npm run dev</code>后你可能会发现如下结果：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dda86d13c?w=1030&amp;h=409&amp;f=png&amp;s=68163" alt></p>
+<p>这是因为官方默认<code>babel-loader | babel</code>对应的版本需要一致: 即<code>babel-loader</code>需要搭配最新版本<code>babel</code>，详细可参考<a href="https://www.cnblogs.com/soyxiaobi/p/9554565.html" target="_blank" rel="noopener">这篇博客</a>。</p>
+<p>两种解决方案:</p>
+<ul>
+<li><p>回退低版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i babel-loader@7 babel-core babel-preset-env -D</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新到最高版本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i babel-loader @babel/core @babel/preset-env webpack -D</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我这里采取的是第一个方案，回退后，再此运行<code>npm run dev</code>，得到如下结果：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddbdb0175?w=527&amp;h=250&amp;f=png&amp;s=4549" alt> </p>
+<p>到这里了是不是感觉很爽，不就是配置嘛，想要使用什么就配置什么。<br>&nbsp; </p>
+<h4 id="5-2-优化babel配置"><a href="#5-2-优化babel配置" class="headerlink" title="5.2 优化babel配置"></a>5.2 优化babel配置</h4><p>虽然babel完全可以在<code>webpack.config.js</code>中进行配置，但现在不是都提倡模块化嘛，也许之后babel膨胀了，增加了更多的配置项呢？<br>那我们不如把它提取出来，把它放到根目录下的<code>.babelrc</code>文件下（webpack会自动调用<code>.babelrc</code>里的babel配置选项）。</p>
+<p>我们在项目根目录下新建<code>.babelrc</code>文件：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddbeac2a4?w=243&amp;h=222&amp;f=png&amp;s=8674" alt></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;                             <span class="comment">// jsx配置</span></span><br><span class="line">                test: <span class="regexp">/(\.jsx|\.js)$/</span>,   </span><br><span class="line">                use: &#123;                    <span class="comment">// 注意use选择如果有多项配置，可写成这种对象形式</span></span><br><span class="line">                    loader: <span class="string">"babel-loader"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>   <span class="comment">// 排除匹配node_modules模块</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// .babelrc 使用时把注释删掉，该文件不能添加注释</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"presets"</span>: [<span class="string">"env"</span>, <span class="string">"react"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时不出问题的话应该一切运行正常，接下来让我们进入强大的插件模块。<br>&nbsp; </p>
+<h3 id="六、插件（Plugins）"><a href="#六、插件（Plugins）" class="headerlink" title="六、插件（Plugins）"></a>六、插件（Plugins）</h3><p>插件（Plugins）是用来拓展Webpack功能的，它们会在整个构建过程中生效，执行相关的任务。<br>Loaders和Plugins常常被弄混，但是他们其实是完全不同的东西，可以这么来说，loaders是在打包构建过程中用来处理源文件的（JSX，Scss，Less..），一次处理一个，插件并不直接操作单个文件，它直接对整个构建过程其作用。<br>&nbsp; </p>
+<h4 id="6-1-插件如何使用"><a href="#6-1-插件如何使用" class="headerlink" title="6.1 插件如何使用"></a>6.1 插件如何使用</h4><p>使用某个插件，需要通过<code>npm</code>进行安装，然后在<code>webpack.config.js</code>配置文件的<code>plugins</code>(是一个数组)配置项中添加该插件的实例，下面我们先来使用一个简单的版权声明插件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);  <span class="comment">// 这个插件不需要安装，是基于webpack的，需要引入webpack模块</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;                             <span class="comment">// jsx配置</span></span><br><span class="line">                test: <span class="regexp">/(\.jsx|\.js)$/</span>,   </span><br><span class="line">                use: &#123;                    <span class="comment">// 注意use选择如果有多项配置，可写成这种对象形式</span></span><br><span class="line">                    loader: <span class="string">"babel-loader"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>   <span class="comment">// 排除匹配node_modules模块</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'版权所有，翻版必究'</span>)  <span class="comment">// new一个插件的实例 </span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<code>npm run build</code>打包后我们看到<code>bundle.js</code>文件显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1ddc902a03?w=581&amp;h=110&amp;f=png&amp;s=16515" alt><br>&nbsp; </p>
+<h4 id="6-2-自动生成html文件-HtmlWebpackPlugin"><a href="#6-2-自动生成html文件-HtmlWebpackPlugin" class="headerlink" title="6.2 自动生成html文件(HtmlWebpackPlugin)"></a>6.2 自动生成html文件(HtmlWebpackPlugin)</h4><p>到目前为止我们都是使用一开始建好的<code>index.html</code>文件，而且也是手动引入<code>bundle.js</code>，要是以后我们引入不止一个js文件，而且更改js文件名的话，也得手动更改<code>index.html</code>中的js文件名，所以能不能自动生成<code>index.html</code>且自动引用打包后的js呢？<code>HtmlWebpackPlugin</code>插件就是用来解决这个问题的：</p>
+<p>首先安装该插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i html-webpack-plugin -D</span><br></pre></td></tr></table></figure></p>
+<p>然后我们对项目结构进行一些更改：</p>
+<ol>
+<li>把<code>dist</code>整个文件夹删除；</li>
+<li>在<code>src</code>文件夹下新建一个<code>index.template.html</code>(名称自定义)文件模板（当然这个是可选的，因为就算不设置模板，<code>HtmlWebpackPlugin</code>插件也会生成默认<code>html</code>文件，这里我们设置模块会让我们的开发更加灵活），如下：</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.template.html --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Here is Template<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'root'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>webpack.config.js</code>中我们引入了<code>HtmlWebpackPlugin</code>插件，并配置了引用了我们设置的模板，如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);  <span class="comment">// 路径处理模块</span></span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);  <span class="comment">// 这个插件不需要安装，是基于webpack的，需要引入webpack模块</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>); <span class="comment">// 引入HtmlWebpackPlugin插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;                             <span class="comment">// jsx配置</span></span><br><span class="line">                test: <span class="regexp">/(\.jsx|\.js)$/</span>,   </span><br><span class="line">                use: &#123;                    <span class="comment">// 注意use选择如果有多项配置，可写成这种对象形式</span></span><br><span class="line">                    loader: <span class="string">"babel-loader"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>   <span class="comment">// 排除匹配node_modules模块</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'版权所有，翻版必究'</span>),  <span class="comment">// new一个插件的实例 </span></span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            template: path.join(__dirname, <span class="string">"/src/index.template.html"</span>)<span class="comment">// new一个这个插件的实例，并传入相关的参数</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们使用<code>npm run build</code>进行打包，你会发现，<code>dist</code>文件夹和<code>html</code>文件都会自动生成，如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dde5c7794?w=640&amp;h=287&amp;f=png&amp;s=33902" alt> </p>
+<p>为什么会自动生成<code>dist</code>文件夹呢？因为我们在<code>output</code>出口配置项中定义了出口文件所在的位置为<code>dist</code>文件夹，且出口文件名为<code>bundle.js</code>，所以<code>HtmlWebpackPlugin</code>会自动帮你在<code>index.html</code>中引用名为<code>bundle.js</code>文件，如果你在<code>webpack.config.js</code>文件中更改了出口文件名，<code>index.html</code>中也会自动更改该文件名，这样以后修改起来是不是方便多了？<br>&nbsp; </p>
+<h4 id="6-3-清理-dist文件夹-CleanWebpackPlugin"><a href="#6-3-清理-dist文件夹-CleanWebpackPlugin" class="headerlink" title="6.3 清理/dist文件夹(CleanWebpackPlugin)"></a>6.3 清理<code>/dist</code>文件夹(CleanWebpackPlugin)</h4><p>你可能已经注意到，在我们删掉<code>/dist</code>文件夹之前，由于前面的代码示例遗留，导致我们的<code>/dist</code>文件夹比较杂乱。<code>webpack</code>会生成文件，然后将这些文件放置在<code>/dist</code>文件夹中，但是<code>webpack</code>无法追踪到哪些文件是实际在项目中用到的。</p>
+<p>通常，在每次构建前清理<code>/dist</code>文件夹，是比较推荐的做法，因此只会生成用到的文件，这时候就用到<code>CleanWebpackPlugin</code>插件了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i clean-webpack-plugin -D</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>); <span class="comment">// 引入CleanWebpackPlugin插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'版权所有，翻版必究'</span>),  <span class="comment">// new一个插件的实例 </span></span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            template: path.join(__dirname, <span class="string">"/src/index.template.html"</span>)<span class="comment">// new一个这个插件的实例，并传入相关的参数</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),  <span class="comment">// 所要清理的文件夹名称</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>插件的使用方法都是一样的，首先引入，然后new一个实例，实例可传入参数。</p>
+<p>现在我们运行<code>npm run build</code>后就会发现，webpack会先将<code>/dist</code>文件夹删除，然后再生产新的<code>/dist</code>文件夹。<br>&nbsp; </p>
+<h4 id="6-4-热更新-HotModuleReplacementPlugin"><a href="#6-4-热更新-HotModuleReplacementPlugin" class="headerlink" title="6.4 热更新(HotModuleReplacementPlugin)"></a>6.4 热更新(HotModuleReplacementPlugin)</h4><p><code>HotModuleReplacementPlugin</code>（HMR）是一个很实用的插件，可以在我们修改代码后自动刷新预览效果。<br>&nbsp;<br>方法：</p>
+<ol>
+<li><code>devServer</code>配置项中添加<code>hot: true</code>参数。</li>
+<li>因为<code>HotModuleReplacementPlugin</code>是<code>webpack</code>模块自带的，所以引入<code>webpack</code>后，在<code>plugins</code>配置项中直接使用即可。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);  <span class="comment">// 这个插件不需要安装，是基于webpack的，需要引入webpack模块</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>, <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>, <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">        hot: <span class="literal">true</span> <span class="comment">// 热更新</span></span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'版权所有，翻版必究'</span>),  <span class="comment">// new一个插件的实例 </span></span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            template: path.join(__dirname, <span class="string">"/src/index.template.html"</span>)<span class="comment">// new一个这个插件的实例，并传入相关的参数</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),  <span class="comment">// 传入所要清理的文件夹名称</span></span><br><span class="line">        <span class="keyword">new</span> webpack.HotModuleReplacementPlugin() <span class="comment">// 热更新插件 </span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时我们重新启动项目<code>npm run dev</code>后，修改<code>hello.js</code>的内容，会发现浏览器预览效果会自动刷新（也许反应会比较慢，因为我们使用了<code>source-map</code>和其他配置的影响，后面代码分离的时候我们再处理）。<br>&nbsp; </p>
+<h3 id="七、项目优化及拓展"><a href="#七、项目优化及拓展" class="headerlink" title="七、项目优化及拓展"></a>七、项目优化及拓展</h3><h4 id="7-1-代码分离"><a href="#7-1-代码分离" class="headerlink" title="7.1 代码分离"></a>7.1 代码分离</h4><p>在当前的开发环境都是提倡模块化，webpack自然不例外，我们前面的<code>webpack.config.js</code>配置文件，其实也没配置多少东西就这么多了，要是以后增加了更多配置，岂不是看得眼花缭乱，所以最好的方法就是把它拆分，方便管理：</p>
+<p><strong>1</strong>. 我们在根目录下新建三个文件，分别为<code>webpack.common.js</code>、<code>webpack.dev.js</code>、<code>webpack.prod.js</code>，分别代表公共配置文件、开发环境配置文件、生产环境（指项目上线时的环境）配置文件。</p>
+<p><strong>2</strong>. 安装一个合并模块插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i webpack-merge -D</span><br></pre></td></tr></table></figure></p>
+<p><strong>3</strong>. 将<code>webpack.config.js</code>的代码拆分到上述新建的三个文件中，然后把<code>webpack.config.js</code>文件删除，具体如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);  <span class="comment">// 路径处理模块</span></span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);  <span class="comment">// 这个插件不需要安装，是基于webpack的，需要引入webpack模块</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>); <span class="comment">// 引入HtmlWebpackPlugin插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">"/src/index.js"</span>), <span class="comment">// 入口文件</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"bundle.js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(scss|sass)$/</span>,   <span class="comment">// 正则匹配以.scss和.sass结尾的文件</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]  <span class="comment">// 需要用的loader，一定是这个顺序，因为调用loader是从右往左编译的</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;                             <span class="comment">// jsx配置</span></span><br><span class="line">                test: <span class="regexp">/(\.jsx|\.js)$/</span>,   </span><br><span class="line">                use: &#123;                    <span class="comment">// 注意use选择如果有多项配置，可写成这种对象形式</span></span><br><span class="line">                    loader: <span class="string">"babel-loader"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>   <span class="comment">// 排除匹配node_modules模块</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'版权所有，翻版必究'</span>),  <span class="comment">// new一个插件的实例 </span></span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            template: path.join(__dirname, <span class="string">"/src/index.template.html"</span>)<span class="comment">// new一个这个插件的实例，并传入相关的参数</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.dev.js</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);  <span class="comment">// 引入webpack-merge功能模块</span></span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>); <span class="comment">// 引入webpack.common.js</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(common, &#123;   <span class="comment">// 将webpack.common.js合并到当前文件</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">"./dist"</span>,   <span class="comment">// 本地服务器所加载文件的目录</span></span><br><span class="line">        port: <span class="string">"8088"</span>,  <span class="comment">// 设置端口号为8088</span></span><br><span class="line">        inline: <span class="literal">true</span>,  <span class="comment">// 文件修改后实时刷新</span></span><br><span class="line">        historyApiFallback: <span class="literal">true</span>, <span class="comment">//不跳转</span></span><br><span class="line">        hot: <span class="literal">true</span>     <span class="comment">//热加载</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.prod.js</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>); <span class="comment">// 引入CleanWebpackPlugin插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(common, &#123; <span class="comment">// 将webpack.common.js合并到当前文件</span></span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),  <span class="comment">// 所要清理的文件夹名称</span></span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>此时我们的项目目录如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df47b8bbb?w=195&amp;h=260&amp;f=png&amp;s=9236" alt> </p>
+<p><strong>4</strong>. 设置<code>package.json</code>的<code>scripts</code>命令：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"webpack-project"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack --config webpack.prod.js"</span>,</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --open --config webpack.dev.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"keywords"</span>: [],</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"ISC"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.26.3"</span>,</span><br><span class="line">    <span class="attr">"babel-loader"</span>: <span class="string">"^7.1.5"</span>,</span><br><span class="line">    <span class="attr">"babel-preset-env"</span>: <span class="string">"^1.7.0"</span>,</span><br><span class="line">    <span class="attr">"babel-preset-react"</span>: <span class="string">"^6.24.1"</span>,</span><br><span class="line">    <span class="attr">"clean-webpack-plugin"</span>: <span class="string">"^0.1.19"</span>,</span><br><span class="line">    <span class="attr">"css-loader"</span>: <span class="string">"^1.0.0"</span>,</span><br><span class="line">    <span class="attr">"html-webpack-plugin"</span>: <span class="string">"^3.2.0"</span>,</span><br><span class="line">    <span class="attr">"node-sass"</span>: <span class="string">"^4.9.4"</span>,</span><br><span class="line">    <span class="attr">"sass-loader"</span>: <span class="string">"^7.1.0"</span>,</span><br><span class="line">    <span class="attr">"style-loader"</span>: <span class="string">"^0.23.1"</span>,</span><br><span class="line">    <span class="attr">"webpack"</span>: <span class="string">"^4.23.1"</span>,</span><br><span class="line">    <span class="attr">"webpack-cli"</span>: <span class="string">"^3.1.2"</span>,</span><br><span class="line">    <span class="attr">"webpack-dev-server"</span>: <span class="string">"^3.1.10"</span>,</span><br><span class="line">    <span class="attr">"webpack-merge"</span>: <span class="string">"^4.1.4"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>:&#123;</span><br><span class="line">    <span class="attr">"react"</span>: <span class="string">"^16.6.0"</span>,</span><br><span class="line">    <span class="attr">"react-dom"</span>: <span class="string">"^16.6.0"</span>  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们把<code>build</code>命令改为了<code>webpack --config webpack.prod.js</code>，意思是把打包配置指向<code>webpack.prod.js</code>配置文件，而之前我们只需要使用一个<code>webpack</code>命令为什么就可以运行了？因为<code>webpack</code>命令是默认指向<code>webpack.config.js</code>这个文件名称了，现在我们把文件名称改了，所以就需要自定义指向新的文件，<code>dev</code>命令中的指令也同理。</p>
+<p>然后我们运行<code>npm run build</code>和<code>npm run dev</code>，效果应该和我们分离代码前是一样的。</p>
+<blockquote>
+<p>注：说道<code>package.json</code>文件，顺便就多提几句，因为也许有些朋友可能对我们安装模块时加的<code>-D</code>、<code>-S</code>或<code>-g</code>命令存在一些疑惑，因为不知道什么时候加什么尾缀。<br>其实这个<code>package.json</code>文件是用于我们安装依赖的，可以把它当成一份依赖安装说明表，就是如果我们把项目上传或者发给其他的开发同事，肯定不会把<code>/node_modules</code>文件夹也发送过去，因为这太大了，不现实也没必要。<br>开发同事只需要有这份<code>package.json</code>文件，然后<code>npm install</code>就可以把我们所需要的依赖都安装下来，但前提是<code>package.json</code>文件上有记录，这就是安装模块时加上<code>-D</code>,<code>-S</code>命令的原因。<br><code>-D</code>的全称是<code>--save-dev</code>指开发环境时需要用到的依赖，会记录在<code>package.json</code>文件中的<code>devDependencies</code>选项中，而<code>-S</code>是<code>--save</code>是指生产环境也就是上线环境中需要用到的依赖，会记录在<code>package.json</code>文件中的<code>dependencies</code>选项中，<code>-g</code>的全称是<code>--global</code>指安装全局命令，就是我们在本电脑的任何项目中都能使用到的命令，比如安装<code>cnpm</code>这个淘宝镜像命令就会用到<code>-g</code>命令。<br>所以我们在安装模块时一定不要忘了加上对应的尾缀命令，让我们的模块有迹可循，否则其他的开发同事接手你的项目的话，会不会下班后（放学后）在门口等你就不知道了。</p>
+</blockquote>
+<p>扯远了，希望不要嫌弃，也是想讲得更详细嘛！<br>&nbsp; </p>
+<h4 id="7-2-多入口多出口"><a href="#7-2-多入口多出口" class="headerlink" title="7.2 多入口多出口"></a>7.2 多入口多出口</h4><p>到目前为止我们都是一个入口文件和一个出口文件，要是我不止一个入口文件呢？下面我们来试试：</p>
+<p>在<code>webpack.common.js</code>中的<code>entry</code>入口有三种写法，分别为字符串、数组和对象，平时我们用得比较多的是对象，所以我们把它改为对象的写法，首先我们在<code>src</code>文件夹下新建<code>two.js</code>文件，名称任意。因为有多个入口，所以肯定得多个出口来进行一一对应了，所以<code>entry</code>和<code>output</code>配置如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        index: path.join(__dirname, <span class="string">"/src/index.js"</span>),</span><br><span class="line">        two: path.join(__dirname, <span class="string">"/src/two.js"</span>)</span><br><span class="line">    &#125;, </span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join( __dirname, <span class="string">"/dist"</span>), <span class="comment">//打包后的文件存放的地方</span></span><br><span class="line">        filename: <span class="string">"[name].js"</span> <span class="comment">//打包后输出文件的文件名</span></span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// two.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">two</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    element.innerHTML = <span class="string">'我是第二个入口文件'</span>;</span><br><span class="line">    <span class="keyword">return</span> element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">'root'</span>).appendChild(two());</span><br></pre></td></tr></table></figure>
+<p>然后我们运行<code>npm run build</code>打包后发现<code>/dist</code>文件夹下会多出<code>two.js</code>文件，同时<code>index.html</code>也会自动将<code>two.js</code>引入，然后我们运行<code>npm run dev</code>显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df5af1e05?w=506&amp;h=212&amp;f=png&amp;s=6121" alt><br>&nbsp; </p>
+<h4 id="7-3-增加css前缀、分离css、消除冗余css、分离图片"><a href="#7-3-增加css前缀、分离css、消除冗余css、分离图片" class="headerlink" title="7.3 增加css前缀、分离css、消除冗余css、分离图片"></a>7.3 增加css前缀、分离css、消除冗余css、分离图片</h4><p>&nbsp;<br><strong>1.增加css前缀</strong></p>
+<p>平时我们写css时，一些属性需要手动加上前缀，比如<code>-webkit-border-radius: 10px;</code>，在webpack中我们能不能让它自动加上呢？那是必须的，首先肯定得安装模块了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i postcss-loader autoprefixer -D</span><br></pre></td></tr></table></figure></p>
+<p>安装好这两个模块后，在项目根目录下新建<code>postcss.config.js</code>文件:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// postcss.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="built_in">require</span>(<span class="string">'autoprefixer'</span>)  <span class="comment">// 引用autoprefixer模块</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>style.css</code>中增加以下样式：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* style.css */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#999</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#root</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">margin-top</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(45deg); <span class="comment">/* 这个属性会产生前缀 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改<code>webpack.common.js</code>文件中的<code>css-loader</code>配置：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: [            </span><br><span class="line">                    &#123;<span class="attr">loader</span>: <span class="string">'style-loader'</span>&#125;, <span class="comment">// 这里采用的是对象配置loader的写法</span></span><br><span class="line">                    &#123;<span class="attr">loader</span>: <span class="string">'css-loader'</span>&#125;,</span><br><span class="line">                    &#123;<span class="attr">loader</span>: <span class="string">'postcss-loader'</span>&#125; <span class="comment">// 使用postcss-loader</span></span><br><span class="line">                ]  </span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们运行<code>npm run dev</code>后css样式中会自动添加前缀，显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1df7fa7017?w=856&amp;h=423&amp;f=png&amp;s=49231" alt><br>&nbsp;<br><strong>2.分离css</strong></p>
+<p>虽然webpack的理念是把css、js全都打包到一个文件里，但要是我们想把css分离出来该怎么做呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i extract-text-webpack-plugin@next -D  // 加上@next是为了安装最新的，否则会出错</span><br></pre></td></tr></table></figure></p>
+<p>安装完以上插件后在<code>webpack.common.js</code>文件中引入并使用该插件：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>) <span class="comment">//引入分离插件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: ExtractTextPlugin.extract(&#123;  <span class="comment">// 这里我们需要调用分离插件内的extract方法</span></span><br><span class="line">                    fallback: <span class="string">'style-loader'</span>,  <span class="comment">// 相当于回滚，经postcss-loader和css-loader处理过的css最终再经过style-loader处理</span></span><br><span class="line">                    use: [<span class="string">'css-loader'</span>, <span class="string">'postcss-loader'</span>]</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">new</span> ExtractTextPlugin(<span class="string">'css/index.css'</span>) <span class="comment">// 将css分离到/dist文件夹下的css文件夹中的index.css</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行<code>npm run build</code>后会发现<code>/dist</code>文件夹内多出了<code>/css</code>文件夹及<code>index.css</code>文件。<br>&nbsp; </p>
+<blockquote>
+<p>经读友提示（感谢热心读友）：现在<code>webpack4.x</code>版本分离css方法可采用<code>mini-css-extract-plugin</code>插件，具体使用方式可<a href="https://www.npmjs.com/package/mini-css-extract-plugin" target="_blank" rel="noopener">参考这里</a>，套路一样的哈。</p>
+</blockquote>
+<p><strong>3.消除冗余css</strong></p>
+<p>有时候我们css写得多了，可能会不自觉的写重复了一些样式，这就造成了多余的代码，上线前又忘了检查，对于这方面，我们应该尽量去优化它，webpack就有这个功能。</p>
+<p><code>cnpm i purifycss-webpack purify-css glob -D</code><br>安装完上述三个模块后，因为正常来说是在生产环境中优化代码，所以我们应该是在<code>webpack.prod.js</code>文件中进行配置，引入<code>clean-webpack-plugin</code>及<code>glob</code>插件并使用它们：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.prod.js</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>); <span class="comment">// 引入CleanWebpackPlugin插件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> PurifyCssWebpack = <span class="built_in">require</span>(<span class="string">'purifycss-webpack'</span>); <span class="comment">// 引入PurifyCssWebpack插件</span></span><br><span class="line"><span class="keyword">const</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>);  <span class="comment">// 引入glob模块,用于扫描全部html文件中所引用的css</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(common, &#123;   <span class="comment">// 将webpack.common.js合并到当前文件</span></span><br><span class="line">    devtool: <span class="string">'source-map'</span>,  <span class="comment">// 会生成对于调试的完整的.map文件，但同时也会减慢打包速度</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),  <span class="comment">// 所要清理的文件夹名称</span></span><br><span class="line">        <span class="keyword">new</span> PurifyCssWebpack(&#123;</span><br><span class="line">            paths: glob.sync(path.join(__dirname, <span class="string">'src/*.html'</span>)) <span class="comment">// 同步扫描所有html文件中所引用的css</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>我们在<code>style.css</code>文件中增加一些多余的代码试试：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* style.css */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#999</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#root</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">margin-top</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(45deg); <span class="comment">/* 这个属性会产生前缀 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.a</span>&#123;                 <span class="comment">/* 冗余css */</span></span><br><span class="line">    <span class="attribute">color</span>: black;     </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.b</span>&#123;                 <span class="comment">/* 冗余css */</span></span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">background</span>: yellow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们运行<code>npm run build</code>后发现打包后的<code>index.css</code>中是没有多余的<code>.a</code>和<code>.b</code>代码的：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* index.css */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#999</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#root</span> <span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">-webkit-transform</span>: <span class="built_in">rotate</span>(45deg);</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(45deg);</span><br><span class="line">  <span class="comment">/* 这个属性会产生前缀 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*# sourceMappingURL=index.css.map*/</span></span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;<br><strong>4.处理图片</strong></p>
+<p>到目前为止我们还没讲到图片的问题，如果要使用图片，我们得安装两个loader：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 虽然我们只需使用url-loader，但url-loader是依赖于file-loader的，所以也要安装</span><br><span class="line">cnpm i url-loader file-loader -D</span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>webpack.common.js</code>中配置<code>url-loader</code>：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">                    fallback: <span class="string">'style-loader'</span>,</span><br><span class="line">                    use: [<span class="string">'css-loader'</span>, <span class="string">'postcss-loader'</span>]</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|svg|gif)$/</span>,  <span class="comment">// 正则匹配图片格式名</span></span><br><span class="line">                use: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        loader: <span class="string">'url-loader'</span>  <span class="comment">// 使用url-loader</span></span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们修改一下<code>style.css</code>，把背景改为图片背景：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* style.css */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="built_in">url</span>(../images/coffee.png) top right repeat-y;  <span class="comment">/* 设为图片背景 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#root</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">margin-top</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(45deg); <span class="comment">/* 这个属性会产生前缀 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.a</span>&#123;</span><br><span class="line">    <span class="attribute">color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.b</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">background</span>: yellow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行<code>npm run dev</code>后显示如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dfd653089?w=1354&amp;h=523&amp;f=png&amp;s=81245" alt> </p>
+<p>但是背景图片变成了<code>base64</code>，因为webpack会自动优化图片，减少发送请求，但是如果我想把它变成路径的该怎么做？</p>
+<p>我们可以把<code>webpack.common.js</code>的loader配置更改一下，增加<code>options</code>选项：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">                    fallback: <span class="string">'style-loader'</span>,</span><br><span class="line">                    use: [<span class="string">'css-loader'</span>, <span class="string">'postcss-loader'</span>]</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|svg|gif)$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                        options: &#123;</span><br><span class="line">                            limit: <span class="number">1000</span>  <span class="comment">// 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们运行<code>npm run build</code>后，再运行<code>npm run dev</code>，额，图片是没有转成base64了，但是图片怎么不显示了？</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1dfe7217c6?w=1355&amp;h=312&amp;f=png&amp;s=49057" alt> </p>
+<p>问题就出在路径上，我们之前图片的路径是在<code>../images</code>文件夹下，但是打包出来后没有这个路径了，图片直接和文件同级了，所以我们需要在<code>webpack.common.js</code>中给它设置一个文件夹：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            ...</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|svg|gif)$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                        options: &#123;</span><br><span class="line">                            limit: <span class="number">1000</span>,  <span class="comment">// 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化</span></span><br><span class="line">                            outputPath: <span class="string">'images'</span>  <span class="comment">// 设置打包后图片存放的文件夹名称</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续<code>npm run build</code>打包再<code>npm run dev</code>运行，我的天！图片还是不显示！<br>调试工具上看图片路径有<code>images</code>文件夹了，但是我的<code>../</code>呢？</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e03ef5426?w=1360&amp;h=314&amp;f=png&amp;s=50046" alt> </p>
+<p>这又涉及到配置路径的问题上了，我们还需要在css-loader中给背景图片设置一个公共路径<code>publicPath: &#39;../&#39;</code>，如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,   <span class="comment">// 正则匹配以.css结尾的文件</span></span><br><span class="line">                use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">                    fallback: <span class="string">'style-loader'</span>,</span><br><span class="line">                    use: [<span class="string">'css-loader'</span>, <span class="string">'postcss-loader'</span>],</span><br><span class="line">                    publicPath: <span class="string">'../'</span>  <span class="comment">// 给背景图片设置一个公共路径</span></span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|svg|gif)$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                        options: &#123;</span><br><span class="line">                            limit: <span class="number">1000</span>,  <span class="comment">// 限制只有小于1kb的图片才转为base64，例子图片为1.47kb,所以不会被转化</span></span><br><span class="line">                            outputPath: <span class="string">'images'</span>  <span class="comment">// 设置打包后图片存放的文件夹名称</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在再<code>npm run build</code>打包再<code>npm run dev</code>启动，OK！没毛病！</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e10caf009?w=1364&amp;h=311&amp;f=png&amp;s=49796" alt> </p>
+<p>是不是很热闹？到现在我们不知不觉中也同时解决了图片分离的问题，偷偷高兴一下吧！<br>&nbsp; </p>
+<h4 id="7-4-压缩代码"><a href="#7-4-压缩代码" class="headerlink" title="7.4 压缩代码"></a>7.4 压缩代码</h4><p>在webpack4.x版本中当你打包时会自动把js压缩了，而且<code>npm run dev</code>运行服务器时，当你修改代码时，热更新很慢，这是因为你修改后webpack又自动为你打包，这就导致了在开发环境中效率很慢，所以我们需要把开发环境和生产环境区分开来，这时就体现出我们代码分离的便捷性了，<code>webpack.dev.js</code>代表开发环境的配置，<code>webpack.prod.js</code>代表生产环境的配置，这时我们只要在<code>package.json</code>文件中配置对应环境的命令即可：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  "scripts": &#123;</span><br><span class="line">    "build": "webpack --config webpack.prod.js --mode production",</span><br><span class="line">    "dev": "webpack-dev-server --open --config webpack.dev.js --mode development"</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>--mode production</code>表示打包时是生产环境，会自行将js进行压缩，而<code>--mode development</code>表示当前是开发环境，不需要进行压缩。这同时也解决了之前一直遗留的警告问题：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/29/166bda1e11ba9411?w=1017&amp;h=111&amp;f=png&amp;s=42926" alt><br>&nbsp; </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>好了，到现在我们基本把webapck常用的功能都走了一遍，写得有点长，感谢你能仔细的看到这里，希望能对你有所帮助，如果有发现不对的地方，也请多多指教。其实webpack还有很多功能，这里也没讲述完全，但相信你现在对webpack也有了一定的了解，更多的webpack探索一定难不倒你！</p>
+<p>完整代码请前往<a href="https://github.com/chen-yulun/webpack-project" target="_blank" rel="noopener">github</a>，如果能有所帮助，希望能给个star（偷笑）</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/05/不会发布node包？进来看看/" rel="next" title="不会发布node包？进来看看">
+                <i class="fa fa-chevron-left"></i> 不会发布node包？进来看看
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/20/彻底弄懂JS原型与继承/" rel="prev" title="彻底弄懂JS原型与继承">
+                彻底弄懂JS原型与继承 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">陈煜仑</p>
+              <p class="site-description motion-element" itemprop="description">种一棵树最好的时间是十年前，还有现在</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、什么是webpack，为什么使用它？"><span class="nav-number">2.</span> <span class="nav-text">一、什么是webpack，为什么使用它？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-什么是webpack？"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 什么是webpack？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-为什么使用它？"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 为什么使用它？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、一个简单的打包例子"><span class="nav-number">3.</span> <span class="nav-text">二、一个简单的打包例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-准备工作"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-安装webpack"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 安装webpack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tips"><span class="nav-number">3.3.</span> <span class="nav-text">tips:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-新建文件"><span class="nav-number">3.4.</span> <span class="nav-text">2.3 新建文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-开始进行webpack打包"><span class="nav-number">3.5.</span> <span class="nav-text">2.4 开始进行webpack打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-通过配置文件来使用webpack"><span class="nav-number">3.6.</span> <span class="nav-text">2.5 通过配置文件来使用webpack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-更智能的打包方式"><span class="nav-number">3.7.</span> <span class="nav-text">2.6 更智能的打包方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、构建本地服务器"><span class="nav-number">4.</span> <span class="nav-text">三、构建本地服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-webpack-dev-server配置本地服务器"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 webpack-dev-server配置本地服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Source-Maps调试配置"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 Source Maps调试配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Loaders"><span class="nav-number">5.</span> <span class="nav-text">四、Loaders</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-配置css-loader"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 配置css-loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-配置sass"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 配置sass</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、Babel"><span class="nav-number">6.</span> <span class="nav-text">五、Babel</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-Babel的安装与配置"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 Babel的安装与配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-优化babel配置"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 优化babel配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、插件（Plugins）"><span class="nav-number">7.</span> <span class="nav-text">六、插件（Plugins）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-插件如何使用"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 插件如何使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-自动生成html文件-HtmlWebpackPlugin"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 自动生成html文件(HtmlWebpackPlugin)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-清理-dist文件夹-CleanWebpackPlugin"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 清理/dist文件夹(CleanWebpackPlugin)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-热更新-HotModuleReplacementPlugin"><span class="nav-number">7.4.</span> <span class="nav-text">6.4 热更新(HotModuleReplacementPlugin)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、项目优化及拓展"><span class="nav-number">8.</span> <span class="nav-text">七、项目优化及拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-代码分离"><span class="nav-number">8.1.</span> <span class="nav-text">7.1 代码分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-多入口多出口"><span class="nav-number">8.2.</span> <span class="nav-text">7.2 多入口多出口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-增加css前缀、分离css、消除冗余css、分离图片"><span class="nav-number">8.3.</span> <span class="nav-text">7.3 增加css前缀、分离css、消除冗余css、分离图片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-4-压缩代码"><span class="nav-number">8.4.</span> <span class="nav-text">7.4 压缩代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈煜仑</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="theme-info"><a href="https://github.com/chen-yulun" class="theme-link" rel="noopener" target="_blank">GitHub</a> - <a href="https://juejin.im/user/5ba9ea3c5188255c8b6ef168/posts" class="theme-link" rel="noopener" target="_blank">掘金博客</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
